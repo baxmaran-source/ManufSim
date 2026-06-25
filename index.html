@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ManufSim v3.2</title>
+<title>ManufSim v3.3</title>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#0d1117;--bg2:#161b22;--bg3:#21262d;--bg4:#30363d;--border:#30363d;--border2:#484f58;--text:#e6edf3;--text2:#8b949e;--text3:#6e7681;--acc:#f0a500;--acc2:#d4891a;--green:#3fb950;--red:#f85149;--blue:#58a6ff;--purple:#bc8cff;--orange:#ffa657;--r:6px;--r2:10px}
@@ -107,7 +107,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .dep-list{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
 .dep-tag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:20px;font-size:11px;background:var(--bg4);border:1px solid var(--border2);color:var(--text2)}
 .dep-tag .rx{cursor:pointer;color:var(--text3)}.dep-tag .rx:hover{color:var(--red)}
-
+ 
 /* ═══ VISUAL SEQUENCE BUILDER ═══ */
 .seq-builder{display:flex;gap:14px;align-items:flex-start}
 .seq-palette{width:200px;min-width:200px}
@@ -125,7 +125,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .seq-block .sb-rm{position:absolute;top:-5px;right:-5px;width:16px;height:16px;background:var(--red);color:#fff;border-radius:50%;font-size:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transition:opacity .12s}
 .seq-block:hover .sb-rm{opacity:1}
 .seq-track-empty{color:var(--text3);font-size:12px;font-style:italic;padding:4px}
-
+ 
 /* ═══ GANTT ═══ */
 .gantt-wrap{border:1px solid var(--border);border-radius:var(--r2);overflow:hidden;margin-bottom:16px}
 .gantt-scroll{overflow-x:auto;position:relative}
@@ -155,6 +155,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .order-badge{font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--text3);width:20px;flex-shrink:0}
 /* CURSOR */
 .g-cursor{position:absolute;top:0;bottom:0;width:2px;background:var(--acc);z-index:20;pointer-events:none;transition:left .05s}
+.act-color-swatch{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:var(--text1);flex-shrink:0;transition:border-color .15s;box-sizing:border-box}
+.act-color-swatch:hover{border-color:var(--text1)!important}
+.act-color-selected{border-color:#fff!important;box-shadow:0 0 0 2px var(--acc)}
 /* g-cursor time label removed - time shown in playback bar only */
 /* GANTT controls */
 .gantt-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
@@ -183,7 +186,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
 </head>
 <body>
 <div class="topbar">
-  <div class="logo"><div class="logo-icon">MS</div>ManufSim <span style="font-size:10px;color:var(--text3);margin-left:4px">v3.2</span></div>
+  <div class="logo"><div class="logo-icon">MS</div>ManufSim <span style="font-size:10px;color:var(--text3);margin-left:4px">v3.3</span></div>
   <div class="topbar-r">
     <span class="sim-badge" id="simBadge">—</span>
     <select class="lang-sel" id="langSel" onchange="setLang(this.value)">
@@ -203,8 +206,9 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="nav-lbl" data-t="lbl_model"></div>
     <div class="nav-item" id="nav-machines" onclick="go('machines')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M0 1.5A.5.5 0 01.5 1h1a.5.5 0 01.5.5V4h13.5a.5.5 0 01.354.854l-3 3a.5.5 0 01-.354.146H2v3h10.5a.5.5 0 010 1H1.5a.5.5 0 01-.5-.5v-11z"/></svg><span data-t="nav_machines"></span></div>
     <div class="nav-item" id="nav-ops" onclick="go('ops')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 100-6 3 3 0 000 6z"/></svg><span data-t="nav_ops"></span></div>
-    <div class="nav-item" id="nav-acts" onclick="go('acts')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M14.5 3a.5.5 0 01.5.5v9a.5.5 0 01-.5.5h-13a.5.5 0 01-.5-.5v-9a.5.5 0 01.5-.5h13z"/></svg><span data-t="nav_acts"></span></div>
-    <div class="nav-item" id="nav-products" onclick="go('products')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a2 2 0 012 2v4H6V3a2 2 0 012-2zm3 6V3a3 3 0 10-6 0v4a2 2 0 00-2 2v5a2 2 0 002 2h6a2 2 0 002-2V9a2 2 0 00-2-2z"/></svg><span data-t="nav_products"></span></div>
+    <div class="nav-item" id="nav-products" onclick="go('products')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a2 2 0 012 2v4H6V3a2 2 0 012-2zm3 6V3a3 3 0 10-6 0v4a2 2 0 00-2 2v5a2 2 0 002 2h6a2 2 0 002-2V9a2 2 0 00-2-2z"/></svg><span data-t="products"></span></div>
+<div class="nav-item" id="nav-acts" onclick="go('acts')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M14.5 3a.5.5 0 01.5.5v9a.5.5 0 01-.5.5h-13a.5.5 0 01-.5-.5v-9a.5.5 0 01.5-.5h13z"/></svg><span data-t="nav_acts"></span></div>
+    
     <div class="nav-item" id="nav-seqs" onclick="go('seqs')"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M2.5 3a.5.5 0 01.5.5v6.793l1.146-1.147a.5.5 0 01.708.708l-2 2a.5.5 0 01-.708 0l-2-2a.5.5 0 01.708-.708L2 10.293V3.5a.5.5 0 01.5-.5z"/></svg><span data-t="nav_seqs"></span></div>
   </div>
   <div class="nav-div"></div>
@@ -216,7 +220,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </div>
 <div class="main">
-
+ 
 <!-- SIMS -->
 <div id="page-sims" class="page active">
   <div class="sec-title">🗂 <span data-t="pg_sims_title"></span></div>
@@ -229,7 +233,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
   <div id="simList"></div>
 </div>
-
+ 
 <!-- MACHINES -->
 <div id="page-machines" class="page">
   <div class="sec-title">⚙️ <span data-t="pg_machines_title"></span></div>
@@ -237,7 +241,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="toolbar"><button class="btn btn-p" onclick="showMachModal()">＋ <span data-t="btn_add_machine"></span></button></div>
   <div id="machList"></div>
 </div>
-
+ 
 <!-- OPERATORS -->
 <div id="page-ops" class="page">
   <div class="sec-title">👤 <span data-t="pg_ops_title"></span></div>
@@ -245,15 +249,16 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="toolbar"><button class="btn btn-p" onclick="showOpModal()">＋ <span data-t="btn_add_op"></span></button></div>
   <div id="opList"></div>
 </div>
-
+ 
 <!-- ACTIVITIES -->
 <div id="page-acts" class="page">
   <div class="sec-title">📋 <span data-t="pg_acts_title"></span></div>
   <div class="sec-sub" data-t="pg_acts_sub"></div>
-  <div class="toolbar"><button class="btn btn-p" onclick="showActModal()">＋ <span data-t="btn_add_act"></span></button></div>
+  <div class="toolbar"><button class="btn btn-p" onclick="showActModal()">＋ <span data-t="btn_add_act"></span></button>
+  <button class="btn btn-s" onclick="showPeriodicModal()" style="margin-left:6px">⏱ <span data-t="periodic_act"></span></button></div>
   <div id="actList"></div>
 </div>
-
+ 
 <!-- PRODUCTS -->
 <div id="page-products" class="page">
   <div class="sec-title">📦 <span data-t="pg_products_title"></span></div>
@@ -261,14 +266,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
   <div class="toolbar"><button class="btn btn-p" onclick="showProdModal()">＋ <span data-t="btn_add_product"></span></button></div>
   <div id="prodList"></div>
 </div>
-
+ 
 <!-- SEQUENCES -->
 <div id="page-seqs" class="page">
   <div class="sec-title">🔀 <span data-t="pg_seqs_title"></span></div>
   <div class="sec-sub" data-t="pg_seqs_sub"></div>
   <div id="seqContent"></div>
 </div>
-
+ 
 <!-- RESULTS -->
 <div id="page-results" class="page">
   <div class="sec-title">📊 <span data-t="pg_results_title"></span></div>
@@ -282,7 +287,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
   <div id="resultsArea"><div class="empty"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 11H2v3h2v-3zm5-4H7v7h2V7zm5-5h-2v12h2V2z"/></svg><p data-t="empty_results"></p></div></div>
 </div>
-
+ 
 <!-- WIP FLOW -->
 <div id="page-wip" class="page">
   <div class="sec-title">🔄 <span data-t="wip_title"></span></div>
@@ -294,20 +299,26 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
   <div id="wipContent"><div class="empty"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a2 2 0 012 2v4H6V3a2 2 0 012-2z"/></svg><p data-t="empty_results"></p></div></div>
 </div>
-
+ 
 <!-- GANTT -->
 <div id="page-gantt" class="page">
   <div class="sec-title">📅 <span data-t="pg_gantt_title"></span></div>
   <div class="sec-sub" data-t="pg_gantt_sub"></div>
   <div class="gantt-controls">
     <label class="fl" style="margin:0;white-space:nowrap" data-t="lbl_zoom"></label>
-    <select class="fsel" id="ganttZoom" style="width:120px" onchange="renderGantt()">
+    <select class="fsel" id="ganttZoom" style="width:120px" onchange="ganttOffset=0;renderGantt()">
       <option value="full" data-t="opt_full"></option>
       <option value="2h">2 hod</option>
       <option value="1h">1 hod</option>
       <option value="30min">30 min</option>
       <option value="15min">15 min</option>
     </select>
+    <button class="btn btn-s" onclick="ganttPan(-1)" title="◀ späť" class="btn btn-s gantt-pan-btn" style="padding:0 10px;font-size:14px">◀</button>
+    <input type="range" id="ganttPanSlider" min="0" max="100" value="0"
+      style="flex:1;min-width:80px;max-width:200px;accent-color:var(--acc)"
+      oninput="ganttPanTo(+this.value)" title="Posun okna">
+    <button class="btn btn-s" onclick="ganttPan(1)" title="▶ vpred" class="btn btn-s gantt-pan-btn" style="padding:0 10px;font-size:14px">▶</button>
+    <span id="ganttOffsetLabel" class="mono xs" style="color:var(--acc);min-width:40px">0:00</span>
     <button class="btn btn-p" onclick="runAndShow();renderGantt()">▶ <span data-t="btn_gen_gantt"></span></button>
   </div>
   <!-- GANTT ROW ORDER EDITOR (collapsible) -->
@@ -352,10 +363,10 @@ tr:hover td{background:rgba(255,255,255,.02)}
     </div>
   </div>
 </div>
-
+ 
 </div><!-- /main -->
 </div><!-- /layout -->
-
+ 
 <!-- MODAL -->
 <div id="overlay" class="overlay hidden" onclick="ocOverlay(event)">
   <div class="modal" id="modalBox">
@@ -367,14 +378,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
     </div>
   </div>
 </div>
-
+ 
 <script>
 // ══════════════════════════════════════════════════
 // TRANSLATIONS
 // ══════════════════════════════════════════════════
 const TR = {
 sk:{lbl_sims:'Simulácie',lbl_model:'Model',lbl_results:'Výsledky',
-nav_sims:'Simulácie',nav_machines:'Stroje',nav_ops:'Operátori',nav_acts:'Aktivity',nav_seqs:'Sekvencie',nav_results:'Výsledky',nav_gantt:'Gantt',
+nav_sims:'Simulácie',nav_machines:'Stroje',nav_ops:'Operátori',nav_acts:'Aktivity',nav_seqs:'Sekvencie',nav_results:'Výsledky',nav_gantt:'Gantt',products:'Produkty',
 pg_sims_title:'Simulácie',pg_sims_sub:'Správa výrobných simulácií',
 pg_machines_title:'Stroje / Stanice',pg_machines_sub:'Výrobné stroje a ich nastavenia (takt čas je definovaný aktivitou)',
 pg_ops_title:'Operátori',pg_ops_sub:'Pracovníci',
@@ -408,10 +419,10 @@ confirm_del_act:'Zmazať aktivitu?',
     line_oee_formula:'OEE linky = skutočný výstup / teoretické max (úzke miesto)',theo_max:'Teor. max (úzke miesto)',actual_out:'Skutočný výstup',line_avail:'Dostupnosť linky',line_perf:'Výkon linky',oee_per_machine:'OEE strojov — detail',oee_per_op:'OEE operátorov — detail',op_oee:'OEE operátora',op_oee_formula:'Aktívny čas / čas zmeny × kvalita',cycles_label:'Cyklov',takt_label:'Takt (s)',wait_pct:'Čakanie %',most_waited:'Najviac čakalo',line_oee_note:'Výpočet: výstup linky vs. teoretické max pri najpomalšom stroji (úzke miesto)',
     drag_reorder:'Potiahnite pre zmenu poradia',gantt_order_title:'Poradie riadkov Gantt',gantt_order_reset:'Resetovať poradie',
 f_priority:'Priorita',prio_highest:'najvyššia',prio_lowest:'najnižšia',
-prio_hint:'Ak stroj dokončí cyklus a operátor práve vykonáva prerušiteľnú aktivitu s nižšou prioritou (vyšším číslom), operátor ju preruší a ide obsluhovať stroj.',
+periodic_act:'Periodická aktivita',f_trigger_type:'Typ spúšťača',trigger_parts:'Kusy stroja',trigger_time:'Čas',f_trigger_n:'Interval (N)',f_trigger_unit:'Jednotka',f_trigger_offset:'Offset (prvý výskyt)',f_blocks_machine:'Blokuje stroj',f_blocks_op:'Blokuje operátora',f_repeating:'Opakovanie',periodic_hint:'Aktivita sa spustí automaticky každých N kusov alebo N časových jednotiek.',unit_sec:'Sekundy',unit_min:'Minúty',unit_hour:'Hodiny',f_act_color:'Farba aktivity',f_act_color_hint:'(voliteľné)',f_act_color_none:'Bez farby (predvolená)',f_tool_change:'Výmena nástroja',f_change_every:'Každých N kusov',tool_change_hint:'Stroj sa zastaví na výmenu každých N kusov (0=bez výmeny)',prio_hint:'Ak stroj dokončí cyklus a operátor práve vykonáva prerušiteľnú aktivitu s nižšou prioritou (vyšším číslom), operátor ju preruší a ide obsluhovať stroj.',
 },
 en:{lbl_sims:'Simulations',lbl_model:'Model',lbl_results:'Results',
-nav_sims:'Simulations',nav_machines:'Machines',nav_ops:'Operators',nav_acts:'Activities',nav_seqs:'Sequences',nav_results:'Results',nav_gantt:'Gantt',
+nav_sims:'Simulations',nav_machines:'Machines',nav_ops:'Operators',nav_acts:'Activities',nav_seqs:'Sequences',nav_results:'Results',nav_gantt:'Gantt',products:'Products',
 pg_sims_title:'Simulations',pg_sims_sub:'Manage manufacturing simulations',
 pg_machines_title:'Machines / Stations',pg_machines_sub:'Production machines (takt time is set by activities)',
 pg_ops_title:'Operators',pg_ops_sub:'Workers',
@@ -445,10 +456,10 @@ confirm_del_act:'Delete activity?',
     line_oee_formula:'Line OEE = actual output / theoretical max (bottleneck)',theo_max:'Theo. max (bottleneck)',actual_out:'Actual output',line_avail:'Line Availability',line_perf:'Line Performance',oee_per_machine:'Machine OEE — detail',oee_per_op:'Operator OEE — detail',op_oee:'Operator OEE',op_oee_formula:'Active time / shift time × quality',cycles_label:'Cycles',takt_label:'Takt (s)',wait_pct:'Wait %',most_waited:'Most waited',line_oee_note:'Calculation: line output vs. theoretical max at slowest machine (bottleneck)',
     drag_reorder:'Drag to reorder',gantt_order_title:'Gantt Row Order',gantt_order_reset:'Reset Order',
 f_priority:'Priority',prio_highest:'highest',prio_lowest:'lowest',
-prio_hint:'If a machine finishes its cycle and the operator is executing an interruptible activity with lower priority (higher number), the operator will interrupt it and go service the machine.',
+periodic_act:'Periodic Activity',f_trigger_type:'Trigger Type',trigger_parts:'Machine Parts',trigger_time:'Time',f_trigger_n:'Interval (N)',f_trigger_unit:'Unit',f_trigger_offset:'Offset (first occurrence)',f_blocks_machine:'Blocks Machine',f_blocks_op:'Blocks Operator',f_repeating:'Repeating',periodic_hint:'Activity fires automatically every N parts or N time units.',unit_sec:'Seconds',unit_min:'Minutes',unit_hour:'Hours',f_act_color:'Activity Color',f_act_color_hint:'(optional)',f_act_color_none:'No color (default)',f_tool_change:'Tool Change',f_change_every:'Every N parts',tool_change_hint:'Machine stops for tool change every N parts (0=disabled)',prio_hint:'If a machine finishes its cycle and the operator is executing an interruptible activity with lower priority (higher number), the operator will interrupt it and go service the machine.',
 },
 de:{lbl_sims:'Simulationen',lbl_model:'Modell',lbl_results:'Ergebnisse',
-nav_sims:'Simulationen',nav_machines:'Maschinen',nav_ops:'Operatoren',nav_acts:'Aktivitäten',nav_seqs:'Sequenzen',nav_results:'Ergebnisse',nav_gantt:'Gantt',
+nav_sims:'Simulationen',nav_machines:'Maschinen',nav_ops:'Operatoren',nav_acts:'Aktivitäten',nav_seqs:'Sequenzen',nav_results:'Ergebnisse',nav_gantt:'Gantt',products:'Produkte',
 pg_sims_title:'Simulationen',pg_sims_sub:'Fertigungssimulationen verwalten',
 pg_machines_title:'Maschinen',pg_machines_sub:'Produktionsmaschinen (Taktzeit wird durch Aktivitäten gesetzt)',
 pg_ops_title:'Operatoren',pg_ops_sub:'Mitarbeiter',
@@ -482,10 +493,10 @@ confirm_del_act:'Aktivität löschen?',
     line_oee_formula:'Linien-OEE = Istleistung / theoretisches Max (Engpass)',theo_max:'Theor. Max (Engpass)',actual_out:'Istleistung',line_avail:'Linien-Verfügbarkeit',line_perf:'Linien-Leistung',oee_per_machine:'Maschinen-OEE — Detail',oee_per_op:'Operator-OEE — Detail',op_oee:'Operator-OEE',op_oee_formula:'Aktive Zeit / Schichtzeit × Qualität',cycles_label:'Zyklen',takt_label:'Takt (s)',wait_pct:'Warten %',most_waited:'Meiste Wartezeit',line_oee_note:'Berechnung: Linienleistung vs. theoretisches Max am langsamsten Maschine',
     drag_reorder:'Ziehen zum Neuordnen',gantt_order_title:'Gantt-Reihenfolge',gantt_order_reset:'Reihenfolge zurücksetzen',
 f_priority:'Priorität',prio_highest:'höchste',prio_lowest:'niedrigste',
-prio_hint:'Wenn eine Maschine ihren Zyklus beendet und der Operator eine unterbrechbare Aktivität mit niedrigerer Priorität (höherer Nummer) ausführt, unterbricht der Operator diese und bedient die Maschine.',
+periodic_act:'Periodische Aktivität',f_trigger_type:'Auslösertyp',trigger_parts:'Maschinenteile',trigger_time:'Zeit',f_trigger_n:'Intervall (N)',f_trigger_unit:'Einheit',f_trigger_offset:'Offset (erste Ausführung)',f_blocks_machine:'Blockiert Maschine',f_blocks_op:'Blockiert Operator',f_repeating:'Wiederholung',periodic_hint:'Aktivität wird automatisch alle N Teile oder N Zeiteinheiten ausgelöst.',unit_sec:'Sekunden',unit_min:'Minuten',unit_hour:'Stunden',f_act_color:'Aktivitätsfarbe',f_act_color_hint:'(optional)',f_act_color_none:'Keine Farbe (Standard)',f_tool_change:'Werkzeugwechsel',f_change_every:'Alle N Teile',tool_change_hint:'Maschine stoppt alle N Teile für Werkzeugwechsel (0=deaktiviert)',prio_hint:'Wenn eine Maschine ihren Zyklus beendet und der Operator eine unterbrechbare Aktivität mit niedrigerer Priorität (höherer Nummer) ausführt, unterbricht der Operator diese und bedient die Maschine.',
 },
 es:{lbl_sims:'Simulaciones',lbl_model:'Modelo',lbl_results:'Resultados',
-nav_sims:'Simulaciones',nav_machines:'Máquinas',nav_ops:'Operadores',nav_acts:'Actividades',nav_seqs:'Secuencias',nav_results:'Resultados',nav_gantt:'Gantt',
+nav_sims:'Simulaciones',nav_machines:'Máquinas',nav_ops:'Operadores',nav_acts:'Actividades',nav_seqs:'Secuencias',nav_results:'Resultados',nav_gantt:'Gantt',products:'Productos',
 pg_sims_title:'Simulaciones',pg_sims_sub:'Gestionar simulaciones',
 pg_machines_title:'Máquinas',pg_machines_sub:'Máquinas (tiempo de ciclo definido por actividades)',
 pg_ops_title:'Operadores',pg_ops_sub:'Trabajadores',
@@ -519,10 +530,10 @@ confirm_del_act:'¿Eliminar actividad?',
     line_oee_formula:'OEE línea = salida real / máx. teórico (cuello de botella)',theo_max:'Máx. teórico (cuello)',actual_out:'Salida real',line_avail:'Disponibilidad línea',line_perf:'Rendimiento línea',oee_per_machine:'OEE máquinas — detalle',oee_per_op:'OEE operadores — detalle',op_oee:'OEE operador',op_oee_formula:'Tiempo activo / turno × calidad',cycles_label:'Ciclos',takt_label:'Takt (s)',wait_pct:'Espera %',most_waited:'Mayor espera',line_oee_note:'Cálculo: salida línea vs. máx. teórico en máquina más lenta',
     drag_reorder:'Arrastrar para reordenar',gantt_order_title:'Orden filas Gantt',gantt_order_reset:'Restablecer orden',
 f_priority:'Prioridad',prio_highest:'más alta',prio_lowest:'más baja',
-prio_hint:'Si una máquina termina su ciclo y el operador está ejecutando una actividad interrumpible de menor prioridad (número mayor), el operador la interrumpirá para atender la máquina.',
+periodic_act:'Actividad periódica',f_trigger_type:'Tipo de disparador',trigger_parts:'Piezas máquina',trigger_time:'Tiempo',f_trigger_n:'Intervalo (N)',f_trigger_unit:'Unidad',f_trigger_offset:'Offset (primera vez)',f_blocks_machine:'Bloquea máquina',f_blocks_op:'Bloquea operador',f_repeating:'Repetición',periodic_hint:'La actividad se ejecuta automáticamente cada N piezas o N unidades de tiempo.',unit_sec:'Segundos',unit_min:'Minutos',unit_hour:'Horas',f_act_color:'Cor da atividade',f_act_color_hint:'(opcional)',f_act_color_none:'Sem cor (padrão)',f_act_color:'Color actividad',f_act_color_hint:'(opcional)',f_act_color_none:'Sin color (predeterminado)',f_tool_change:'Cambio herramienta',f_change_every:'Cada N piezas',tool_change_hint:'Máquina para cada N piezas para cambio (0=desactivado)',prio_hint:'Si una máquina termina su ciclo y el operador está ejecutando una actividad interrumpible de menor prioridad (número mayor), el operador la interrumpirá para atender la máquina.',
 },
 pt:{lbl_sims:'Simulações',lbl_model:'Modelo',lbl_results:'Resultados',
-nav_sims:'Simulações',nav_machines:'Máquinas',nav_ops:'Operadores',nav_acts:'Atividades',nav_seqs:'Sequências',nav_results:'Resultados',nav_gantt:'Gantt',
+nav_sims:'Simulações',nav_machines:'Máquinas',nav_ops:'Operadores',nav_acts:'Atividades',nav_seqs:'Sequências',nav_results:'Resultados',nav_gantt:'Gantt',products:'Produtos',
 pg_sims_title:'Simulações',pg_sims_sub:'Gerenciar simulações',
 pg_machines_title:'Máquinas',pg_machines_sub:'Máquinas (tempo de ciclo definido por atividades)',
 pg_ops_title:'Operadores',pg_ops_sub:'Trabalhadores',
@@ -556,23 +567,34 @@ confirm_del_act:'Excluir atividade?',
     line_oee_formula:'OEE linha = saída real / máx. teórico (gargalo)',theo_max:'Máx. teórico (gargalo)',actual_out:'Saída real',line_avail:'Disponibilidade linha',line_perf:'Desempenho linha',oee_per_machine:'OEE máquinas — detalhe',oee_per_op:'OEE operadores — detalhe',op_oee:'OEE operador',op_oee_formula:'Tempo ativo / turno × qualidade',cycles_label:'Ciclos',takt_label:'Takt (s)',wait_pct:'Espera %',most_waited:'Maior espera',line_oee_note:'Cálculo: saída linha vs. máx. teórico na máquina mais lenta',
     drag_reorder:'Arrastar para reordenar',gantt_order_title:'Ordem linhas Gantt',gantt_order_reset:'Redefinir ordem',
 f_priority:'Prioridade',prio_highest:'mais alta',prio_lowest:'mais baixa',
-prio_hint:'Se uma máquina termina seu ciclo e o operador está executando uma atividade interrompível de menor prioridade (número maior), o operador a interromperá para atender a máquina.',
+periodic_act:'Atividade periódica',f_trigger_type:'Tipo de gatilho',trigger_parts:'Peças da máquina',trigger_time:'Tempo',f_trigger_n:'Intervalo (N)',f_trigger_unit:'Unidade',f_trigger_offset:'Offset (primeira vez)',f_blocks_machine:'Bloqueia máquina',f_blocks_op:'Bloqueia operador',f_repeating:'Repetição',periodic_hint:'A atividade é acionada automaticamente a cada N peças ou N unidades de tempo.',unit_sec:'Segundos',unit_min:'Minutos',unit_hour:'Horas',f_tool_change:'Troca ferramenta',f_change_every:'A cada N peças',tool_change_hint:'Máquina para a cada N peças para troca (0=desativado)',prio_hint:'Se uma máquina termina seu ciclo e o operador está executando uma atividade interrompível de menor prioridade (número maior), o operador a interromperá para atender a máquina.',
 }};
-
+ 
 const COLORS=['#f0a500','#58a6ff','#3fb950','#bc8cff','#ffa657','#f85149','#79c0ff','#56d364','#e3b341','#d2a8ff','#ff7b72','#39d353','#ffa198','#79c0ff','#d4c5f9'];
-
+ 
 let lang='sk';
 function tr(k){return(TR[lang]||TR.sk)[k]||TR.sk[k]||k;}
 function setLang(l){lang=l;document.querySelectorAll('[data-t]').forEach(el=>el.textContent=tr(el.getAttribute('data-t')));renderCur();}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-
+ 
 // ── STATE ──────────────────────────────────────────
 let S={curSim:null,sims:{}};
 function uid(){return '_'+Math.random().toString(36).substr(2,9);}
-function sv(){try{localStorage.setItem('msf3',JSON.stringify(S));}catch(e){}}
+function downloadExport(){
+  const s=sim();if(!s)return;
+  const json=JSON.stringify(s,null,2);
+  const blob=new Blob([json],{type:'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=(s.name||'simulation').replace(/[^a-z0-9_-]/gi,'_')+'.txt';
+  a.click();URL.revokeObjectURL(a.href);
+}
+ 
+function sv(){
+  _modelDirty=true;try{localStorage.setItem('msf3',JSON.stringify(S));}catch(e){}}
 function ld(){try{const d=localStorage.getItem('msf3');if(d)S=JSON.parse(d);}catch(e){}}
 function sim(){return S.curSim?S.sims[S.curSim]:null;}
-
+ 
 // ── NAV ────────────────────────────────────────────
 let curPage='sims';
 function go(p){
@@ -586,9 +608,20 @@ function renderCur(){rPage(curPage);const s=sim();document.getElementById('simBa
 function rPage(p){
   if(p==='sims')rSims();if(p==='machines')rMachines();if(p==='ops')rOps();
   if(p==='acts')rActs();if(p==='products')rProds();if(p==='seqs')rSeqs();
-  if(p==='gantt')renderGanttOrderEditor();
+  if(p==='gantt'){
+    renderGanttOrderEditor();
+    // Auto-regenerate if model changed since last simulation
+    if(simRes && _modelDirty){
+      runAndShow();
+      _modelDirty=false;
+    } else if(!simRes){
+      // No results yet — show empty state
+    } else {
+      renderGantt();
+    }
+  }
 }
-
+ 
 // ── SIMS ───────────────────────────────────────────
 function newSim(){
   const defName='Sim '+(Object.keys(S.sims).length+1);
@@ -614,8 +647,15 @@ function delSim(id){
 function expSim(id){
   const s=S.sims[id];if(!s)return;
   const json=JSON.stringify(s,null,2);
+  // Direct download as .txt
+  const blob=new Blob([json],{type:'text/plain'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=(s.name||'simulation').replace(/[^a-z0-9_-]/gi,'_')+'.txt';
+  a.click();URL.revokeObjectURL(a.href);
+  // Also show in modal for copy/paste fallback
   openModal('📤 Export — '+esc(s.name),
-    `<div class="fg"><label class="fl" style="margin-bottom:8px">Skopírujte JSON a uložte do .json súboru:</label>
+    `<div class="fg"><label class="fl" style="margin-bottom:8px">Súbor bol stiahnutý ako .txt · JSON pre prípadné kopírovanie:</label>
      <textarea class="fi" id="exportTA" rows="14" style="font-family:monospace;font-size:11px;resize:vertical" readonly>${esc(json)}</textarea></div>
      <button class="btn btn-s btn-sm" style="margin-top:6px" onclick="document.getElementById('exportTA').select();document.execCommand('copy');this.textContent='✓ Skopírované!'">📋 Kopírovať</button>`,
     null
@@ -623,7 +663,7 @@ function expSim(id){
   // save button hidden automatically (onSave=null passed to openModal)
   setTimeout(()=>{const ta=document.getElementById('exportTA');if(ta){ta.focus();ta.select();}},80);
 }
-
+ 
 function trigImport(){
   openModal('📥 Import JSON',
     `<div class="fg"><label class="fl">Vložte JSON obsah simulácie:</label>
@@ -647,11 +687,11 @@ function trigImport(){
     }
   );
 }
-
-
+ 
+ 
 function handleImport(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{try{const s=JSON.parse(ev.target.result);if(!s.id)s.id=uid();if(!s.machines)s.machines=[];if(!s.operators)s.operators=[];if(!s.activities)s.activities=[];if(!s.sequences)s.sequences={};if(!s.products)s.products=[];S.sims[s.id]=s;S.curSim=s.id;sv();renderCur();go('machines');}catch(err){}};r.readAsText(f);e.target.value='';}
 function rSims(){const el=document.getElementById('simList');const list=Object.values(S.sims);if(!list.length){el.innerHTML=`<div class="empty"><p>${tr('no_sims')}</p></div>`;return;}el.innerHTML=list.map(s=>`<div class="sim-item ${S.curSim===s.id?'cur':''}" onclick="actSim('${s.id}')"><div><div style="font-weight:500">${esc(s.name)}</div><div style="font-size:11px;color:var(--text3);margin-top:2px">${tr('sim_created')}: ${new Date(s.created).toLocaleDateString()} · ${(s.machines||[]).length} ${tr('m_count')} · ${(s.operators||[]).length} ${tr('op_count')}</div></div><div style="display:flex;gap:6px" onclick="event.stopPropagation()"><button class="btn btn-sm btn-s" onclick="expSim('${s.id}')">${tr('btn_export')}</button><button class="btn btn-sm btn-d" onclick="delSim('${s.id}')">${tr('btn_delete')}</button></div></div>`).join('');}
-
+ 
 // ── MACHINES ───────────────────────────────────────
 function rMachines(){
   const s=sim();const el=document.getElementById('machList');
@@ -677,7 +717,7 @@ function rMachines(){
   </tbody></table></div>`;
 }
 let _eid=null,_sv=null;
-
+ 
 let _modalOk=null;
 function openModal(title, body, onOk){
   document.getElementById('modalTitle').textContent=title;
@@ -692,11 +732,152 @@ function closeModal(){
 }
 function modalOk(){if(_modalOk){_modalOk();}}
 function ocOverlay(e){if(e.target===document.getElementById('overlay'))closeModal();}
-
+ 
+ 
+function showPeriodicModal(id){
+  const s=sim();if(!s)return;
+  _eid=id||null;
+  const a=id?s.activities.find(x=>x.id===id&&x.periodic):null;
+  const prioOpts=Array.from({length:10},(_,i)=>i+1).map(n=>`<option value="${n}" ${(a?.priority||2)===n?'selected':''}>${n}</option>`).join('');
+  const mOpts='<option value="">—</option>'+s.machines.map(m=>`<option value="${m.id}" ${a?.machineId===m.id?'selected':''}>${esc(m.name)}</option>`).join('');
+  const oOpts='<option value="">—</option>'+s.operators.map(o=>`<option value="${o.id}" ${a?.operatorId===o.id?'selected':''}>${esc(o.name)}</option>`).join('');
+  const trigType=a?.triggerType||'parts';
+  const unit=a?.triggerUnit||'min';
+  const body=`
+    <div class="al al-i xs" style="margin-bottom:12px">${tr('periodic_hint')}</div>
+ 
+    <div class="fg">
+      <label class="fl">${tr('f_act_name')}</label>
+      <input class="fi" id="pa_name" value="${esc(a?.name||'')}">
+    </div>
+ 
+    <div class="fr2">
+      <div class="fg">
+        <label class="fl">${tr('f_op')}</label>
+        <select class="fsel" id="pa_op">${oOpts}</select>
+      </div>
+      <div class="fg">
+        <label class="fl">${tr('f_mach')}</label>
+        <select class="fsel" id="pa_mach">${mOpts}</select>
+      </div>
+    </div>
+ 
+    <hr style="border-color:var(--border);margin:10px 0">
+ 
+    <div class="fr2">
+      <div class="fg">
+        <label class="fl">${tr('f_trigger_type')}</label>
+        <select class="fsel" id="pa_ttype" onchange="togglePeriodicUnit()">
+          <option value="parts" ${trigType==='parts'?'selected':''}>${tr('trigger_parts')}</option>
+          <option value="time"  ${trigType==='time' ?'selected':''}>${tr('trigger_time')}</option>
+        </select>
+      </div>
+      <div class="fg" id="pa_unit_wrap" style="${trigType==='time'?'':'visibility:hidden'}">
+        <label class="fl">${tr('f_trigger_unit')}</label>
+        <select class="fsel" id="pa_unit">
+          <option value="sec"  ${unit==='sec' ?'selected':''}>${tr('unit_sec')}</option>
+          <option value="min"  ${unit==='min' ?'selected':''}>${tr('unit_min')}</option>
+          <option value="hour" ${unit==='hour'?'selected':''}>${tr('unit_hour')}</option>
+        </select>
+      </div>
+    </div>
+ 
+    <div class="fr2">
+      <div class="fg">
+        <label class="fl">${tr('f_trigger_n')} <span class="xs muted">(N)</span></label>
+        <input class="fi" id="pa_n" type="number" min="1" value="${a?.triggerN_display||a?.triggerN||50}">
+      </div>
+      <div class="fg">
+        <label class="fl">${tr('f_trigger_offset')} <span class="xs muted">(${trigType==='time'?tr('unit_sec'):tr('trigger_parts')})</span></label>
+        <input class="fi" id="pa_offset" type="number" min="0" value="${a?.triggerOffset||0}">
+      </div>
+    </div>
+ 
+    <hr style="border-color:var(--border);margin:10px 0">
+ 
+    <div class="fr2">
+      <div class="fg">
+        <label class="fl">${tr('f_dur')} (s)</label>
+        <input class="fi" id="pa_dur" type="number" min="1" value="${a?.duration||20}">
+      </div>
+      <div class="fg">
+        <label class="fl">${tr('f_priority')} (1=max)</label>
+        <select class="fsel" id="pa_prio">${prioOpts}</select>
+      </div>
+    </div>
+ 
+    <div class="fr2">
+      <div class="fg" style="display:flex;align-items:center;gap:8px;margin-top:4px">
+        <input type="checkbox" id="pa_blk_m" ${(a?.blocksMachine!==false)?'checked':''}>
+        <label for="pa_blk_m" class="fl" style="margin:0">${tr('f_blocks_machine')}</label>
+      </div>
+      <div class="fg" style="display:flex;align-items:center;gap:8px;margin-top:4px">
+        <input type="checkbox" id="pa_rep" ${(a?.repeating!==false)?'checked':''}>
+        <label for="pa_rep" class="fl" style="margin:0">${tr('f_repeating')}</label>
+      </div>
+    </div>
+    <div class="fg" style="margin-top:10px">
+      <label class="fl">${tr('f_act_color')} <span class="xs muted">${tr('f_act_color_hint')}</span></label>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px">
+        <div class="act-color-swatch ${!a?.color?'act-color-selected':''}" data-color="" onclick="pickActColor(this)" style="background:transparent;border:2px dashed var(--text3)" title="${tr('f_act_color_none')}">✕</div>
+        ${'#f0a500,#58a6ff,#3fb950,#bc8cff,#ffa657,#f85149,#79c0ff,#56d364,#e3b341,#d2a8ff,#ff7b72,#39d353,#ffa198,#d4c5f9'.split(',').map(col=>'<div class="act-color-swatch '+(a?.color===col?'act-color-selected':'')+'" data-color="'+col+'" onclick="pickActColor(this)" style="background:'+col+'" title="'+col+'"></div>').join('')}
+        <input type="color" id="a_color_custom" value="${a?.color&&a.color.startsWith('#')?a.color:'#58a6ff'}" onchange="pickActColorCustom(this)" style="width:28px;height:28px;border:none;border-radius:4px;cursor:pointer;background:none" title="Vlastná farba">
+        <input type="hidden" id="a_color" value="${a?.color||''}">
+      </div>
+    </div>`;
+ 
+  // Set priority select value after render
+  openModal('⏱ '+tr('periodic_act'), body, ()=>{
+    const name=document.getElementById('pa_name').value.trim();
+    if(!name)return;
+    const ttype=document.getElementById('pa_ttype').value;
+    const unit2=document.getElementById('pa_unit')?.value||'min';
+    const n=parseFloat(document.getElementById('pa_n').value)||50;
+    // Convert time to seconds
+    const unitMult={sec:1,min:60,hour:3600};
+    const triggerN = ttype==='time' ? n*(unitMult[unit2]||60) : n;
+    const obj={
+      id:_eid||uid(), name,
+      periodic:true,
+      triggerType:ttype, triggerN, triggerOffset:parseInt(document.getElementById('pa_offset').value)||0,
+      triggerUnit: ttype==='time'?unit2:null,
+      triggerN_display: n, // raw display value
+      duration:parseFloat(document.getElementById('pa_dur').value)||20,
+      priority:parseInt(document.getElementById('pa_prio')?.value)||2,
+      operatorId:document.getElementById('pa_op').value||null,
+      machineId:document.getElementById('pa_mach').value||null,
+      color:document.getElementById('a_color')?.value||null,
+      blocksMachine:document.getElementById('pa_blk_m').checked,
+      repeating:document.getElementById('pa_rep').checked,
+      // unused standard fields
+      cycleTime:0,cycleCount:0,producesQty:1,produces:null,consumes:null,
+      triggersMachine:null,interruptible:false,predecessors:[],outputs:[],changeEvery:0
+    };
+    // Set priority
+    const prioEl=document.getElementById('pa_prio');
+    if(prioEl) obj.priority=parseInt(prioEl.value)||2;
+    if(_eid){const i=s.activities.findIndex(x=>x.id===_eid);s.activities[i]=obj;}
+    else s.activities.push(obj);
+    sv();closeModal();rActs();
+  });
+  // Set priority after modal opens
+  setTimeout(()=>{
+    const pe=document.getElementById('pa_prio');
+    if(pe) pe.value=a?.priority||2;
+    togglePeriodicUnit();
+  },50);
+}
+ 
+function togglePeriodicUnit(){
+  const t=document.getElementById('pa_ttype')?.value;
+  const w=document.getElementById('pa_unit_wrap');
+  if(w) w.style.visibility=t==='time'?'visible':'hidden';
+}
+ 
 function showMachModal(id){const s=sim();if(!s)return;_eid=id||null;const m=id?s.machines.find(x=>x.id===id):null;const curColor=m?.color||COLORS[0];const swatches=COLORS.map(c=>`<div class="cp-swatch ${c===curColor?'sel':''}" style="background:${c}" onclick="pickColor('${c}',this)" data-color="${c}"></div>`).join('');openModal(tr('f_mach_name'),`<div class="fg"><label class="fl">${tr('f_mach_name')}</label><input class="fi" id="m_name" value="${esc(m?.name||'')}"></div><div class="fg"><label class="fl">${tr('f_color')}</label><input type="hidden" id="m_color" value="${curColor}"><div class="color-picker-grid" id="colorGrid">${swatches}</div></div><div class="fg"><label class="fl">${tr('f_desc')}</label><input class="fi" id="m_desc" value="${esc(m?.desc||'')}"></div>`,()=>{const name=document.getElementById('m_name').value.trim();if(!name)return;const obj={id:_eid||uid(),name,color:document.getElementById('m_color').value,desc:document.getElementById('m_desc').value};if(_eid){const i=s.machines.findIndex(x=>x.id===_eid);s.machines[i]=obj;}else s.machines.push(obj);sv();closeModal();rMachines();});}
 function pickColor(c,el){document.getElementById('m_color').value=c;document.querySelectorAll('#colorGrid .cp-swatch').forEach(x=>x.classList.remove('sel'));el.classList.add('sel');}
 function delMach(id){const s=sim();if(!s)return;openModal('⚠️',`<div class="al al-w">${tr('confirm_del')}</div>`,()=>{s.machines=s.machines.filter(m=>m.id!==id);s.activities.forEach(a=>{if(a.machineId===id)a.machineId=null;if(a.triggersMachine===id)a.triggersMachine=null;});sv();closeModal();rMachines();});}
-
+ 
 // ── OPERATORS ──────────────────────────────────────
 function rOps(){
   const s=sim();const el=document.getElementById('opList');
@@ -722,35 +903,66 @@ function rOps(){
 }
 function showOpModal(id){const s=sim();if(!s)return;_eid=id||null;const o=id?s.operators.find(x=>x.id===id):null;openModal(tr('f_op_name'),`<div class="fg"><label class="fl">${tr('f_op_name')}</label><input class="fi" id="o_name" value="${esc(o?.name||'')}"></div><div class="fg"><label class="fl">${tr('f_desc')}</label><input class="fi" id="o_desc" value="${esc(o?.desc||'')}"></div>`,()=>{const name=document.getElementById('o_name').value.trim();if(!name)return;const obj={id:_eid||uid(),name,desc:document.getElementById('o_desc').value};if(_eid){const i=s.operators.findIndex(x=>x.id===_eid);s.operators[i]=obj;}else s.operators.push(obj);sv();closeModal();rOps();});}
 function delOp(id){const s=sim();if(!s)return;openModal('⚠️',`<div class="al al-w">${tr('confirm_del')}</div>`,()=>{s.operators=s.operators.filter(o=>o.id!==id);delete s.sequences[id];sv();closeModal();rOps();});}
-
+ 
 // ── ACTIVITIES ─────────────────────────────────────
 function prioBadge(p){const c=p<=2?'var(--red)':p<=4?'var(--orange)':p<=6?'var(--acc)':p<=8?'var(--blue)':'var(--text3)';return`<span class="mono" style="font-size:11px;color:${c};font-weight:700">P${p}</span>`;}
-function rActs(){const s=sim();const el=document.getElementById('actList');if(!s){el.innerHTML=`<div class="al al-w">${tr('no_sims')}</div>`;return;}if(!s.activities.length){el.innerHTML=`<div class="empty"><p>${tr('no_acts')}</p></div>`;return;}el.innerHTML=`<div class="tw"><table><thead><tr><th>${tr('f_act_name')}</th><th>${tr('f_priority')}</th><th>${tr('f_dur')}</th><th>${tr('f_cycle_time')}</th><th>${tr('f_cycle_count')}</th><th>${tr('f_produces')}</th><th>${tr('f_mach')}</th><th>${tr('f_op')}</th><th>${tr('f_inter')}</th><th></th></tr></thead><tbody>${s.activities.map(a=>{const m=s.machines.find(x=>x.id===a.machineId);const o=s.operators.find(x=>x.id===a.operatorId);const prio=a.priority||5;return`<tr><td><strong>${esc(a.name)}</strong></td><td>${prioBadge(prio)}</td><td class="mono">${a.duration}s</td><td class="mono">${a.cycleTime||0}s</td><td class="mono">${a.cycleCount||0}</td><td>${a.produces?(s.products||[]).find(p=>p.id===a.produces)?`<span class='fc' style='gap:4px'><span class='mach-dot' style='background:${((s.products||[]).find(p=>p.id===a.produces)||{}).color||'#888'}'></span>${esc(((s.products||[]).find(p=>p.id===a.produces)||{}).name||'')}</span>`:'?':'-'}</td><td>${m?`<span class="fc" style="gap:5px"><span class="mach-dot" style="background:${m.color}"></span>${esc(m.name)}</span>`:'-'}</td><td>${o?esc(o.name):'-'}</td><td>${a.interruptible?`<span class="tag tg">${tr('inter_yes')}</span>`:`<span class="tag tr">${tr('inter_no')}</span>`}</td><td><div style="display:flex;gap:5px"><button class="btn btn-sm btn-s" onclick="showActModal('${a.id}')">${tr('btn_edit')}</button><button class="btn btn-sm btn-d" onclick="delAct('${a.id}')">${tr('btn_delete')}</button></div></td></tr>`;}).join('')}</tbody></table></div>`;}
+function rActs(){const s=sim();const el=document.getElementById('actList');if(!s){el.innerHTML=`<div class="al al-w">${tr('no_sims')}</div>`;return;}if(!s.activities.length){el.innerHTML=`<div class="empty"><p>${tr('no_acts')}</p></div>`;return;}el.innerHTML=`<div class="tw"><table><thead><tr><th>${tr('f_act_name')}</th><th>${tr('f_priority')}</th><th>${tr('f_dur')}</th><th>${tr('f_cycle_time')}</th><th>${tr('f_cycle_count')}</th><th>${tr('f_produces')}</th><th>${tr('f_mach')}</th><th>${tr('f_op')}</th><th>${tr('f_inter')}</th><th></th></tr></thead><tbody>${s.activities.map(a=>{const m=s.machines.find(x=>x.id===a.machineId);const o=s.operators.find(x=>x.id===a.operatorId);const prio=a.priority||5;return`<tr><td><strong>${esc(a.name)}</onclick="editAct(\'${a.id}\')${a.duration}s</td><td class="mono">${a.cycleTime||0}s</td><td class="mono">${a.cycleCount||0}${(a.changeEvery||0)>0?' 🔧'+a.changeEvery:''}</td><td>${a.produces?(s.products||[]).find(p=>p.id===a.produces)?`<span class='fc' style='gap:4px'><span class='mach-dot' style='background:${((s.products||[]).find(p=>p.id===a.produces)||{}).color||'#888'}'></span>${esc(((s.products||[]).find(p=>p.id===a.produces)||{}).name||'')}</span>`:'?':'-'}</td><td>${m?`<span class="fc" style="gap:5px"><span class="mach-dot" style="background:${m.color}"></span>${esc(m.name)}</span>`:'-'}</td><td>${o?esc(o.name):'-'}</td><td>${a.interruptible?`<span class="tag tg">${tr('inter_yes')}</span>`:`<span class="tag tr">${tr('inter_no')}</span>`}</td><td><div style="display:flex;gap:5px"><button class="btn btn-sm btn-s" onclick="editAct('${a.id}')">${tr('btn_edit')}</button><button class="btn btn-sm btn-d" onclick="delAct('${a.id}')">${tr('btn_delete')}</button></div></td></tr>`;}).join('')}</tbody></table></div>`;}
+ 
+ 
+function pickActColor(el){
+  document.querySelectorAll('.act-color-swatch').forEach(s=>s.classList.remove('act-color-selected'));
+  el.classList.add('act-color-selected');
+  document.getElementById('a_color').value=el.dataset.color||'';
+}
+function pickActColorCustom(input){
+  document.querySelectorAll('.act-color-swatch').forEach(s=>s.classList.remove('act-color-selected'));
+  document.getElementById('a_color').value=input.value;
+}
+ 
+function editAct(id){const s=sim();if(!s)return;const a=s.activities.find(x=>x.id===id);if(!a)return;a.periodic?showPeriodicModal(id):showActModal(id);}
 function showActModal(id){const s=sim();if(!s)return;_eid=id||null;const a=id?s.activities.find(x=>x.id===id):null;const others=s.activities.filter(x=>x.id!==id);const mOpts=`<option value="">${tr('no_mach')}</option>`+s.machines.map(m=>`<option value="${m.id}" ${a?.machineId===m.id?'selected':''}>${esc(m.name)}</option>`).join('');const oOpts=`<option value="">${tr('no_op_')}</option>`+s.operators.map(o=>`<option value="${o.id}" ${a?.operatorId===o.id?'selected':''}>${esc(o.name)}</option>`).join('');const tOpts=`<option value="">${tr('no_mach')}</option>`+s.machines.map(m=>`<option value="${m.id}" ${a?.triggersMachine===m.id?'selected':''}>${esc(m.name)}</option>`).join('');const pOpts=others.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');const ouOpts=others.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');let tP=[...(a?.predecessors||[])];let tO=[...(a?.outputs||[])];function rT(arr,cid,fn){const c=document.getElementById(cid);if(!c)return;c.innerHTML=arr.map(pid=>{const ac=s.activities.find(x=>x.id===pid);return ac?`<span class="dep-tag">${esc(ac.name)}<span class="rx" onclick="${fn}('${pid}')">✕</span></span>`:''}).join('');}
 const prioOpts=Array.from({length:10},(_,i)=>i+1).map(n=>`<option value="${n}" ${(a?.priority||5)===n?'selected':''}>${n} — ${n===1?tr('prio_highest'):n===10?tr('prio_lowest'):''}</option>`).join('');
 const prodOpts=`<option value="">${tr('no_product')}</option>`+(s.products||[]).map(p=>`<option value="${p.id}" ${a?.produces===p.id?'selected':''}>${esc(p.name)}</option>`).join('');
 const consOpts=`<option value="">${tr('no_product')}</option>`+(s.products||[]).map(p=>`<option value="${p.id}" ${a?.consumes===p.id?'selected':''}>${esc(p.name)}</option>`).join('');
-openModal(tr('f_act_name'),`<div class="fg"><label class="fl">${tr('f_act_name')}</label><input class="fi" id="a_name" value="${esc(a?.name||'')}"></div><div class="fr2"><div class="fg"><label class="fl">${tr('f_dur')}</label><input class="fi" id="a_dur" type="number" min="1" value="${a?.duration||30}"></div><div class="fg"><label class="fl">${tr('f_priority')} (1=${tr('prio_highest')}, 10=${tr('prio_lowest')})</label><select class="fsel" id="a_prio">${prioOpts}</select></div></div><div class="fr2"><div class="fg"><label class="fl">${tr('f_op')}</label><select class="fsel" id="a_op">${oOpts}</select></div><div class="fg"><label class="fl">${tr('f_mach')}</label><select class="fsel" id="a_mach">${mOpts}</select></div></div><div class="fr2"><div class="fg"><label class="fl">${tr('f_triggers')}</label><select class="fsel" id="a_trig">${tOpts}</select></div><div class="fg" style="display:flex;align-items:center;gap:8px;margin-top:22px"><input type="checkbox" id="a_inter" ${a?.interruptible?'checked':''}> <label for="a_inter" class="fl" style="margin:0">${tr('f_inter')}</label></div></div><hr style="border-color:var(--border);margin:10px 0"><div class="fg"><label class="fl" style="color:var(--acc)">⚙️ ${tr('f_cycle_time')}</label><input class="fi" id="a_ctime" type="number" min="0" value="${a?.cycleTime||0}"></div><div class="fr2"><div class="fg"><label class="fl">${tr('f_cycle_count')} <span class="xs muted">${tr('cycle_hint')}</span></label><input class="fi" id="a_ccount" type="number" min="0" value="${a?.cycleCount||0}"></div><div class="fg"><label class="fl">${tr('f_produces_qty')}</label><input class="fi" id="a_qty" type="number" min="1" value="${a?.producesQty||1}"></div></div><div class="fr2"><div class="fg"><label class="fl">📦 ${tr('f_consumes')}</label><select class="fsel" id="a_cons">${consOpts}</select></div><div class="fg"><label class="fl">✅ ${tr('f_produces')}</label><select class="fsel" id="a_prod">${prodOpts}</select></div></div><hr style="border-color:var(--border);margin:10px 0"><div class="al al-i" style="margin-bottom:10px;font-size:11px">${tr('prio_hint')}</div><div class="fg"><label class="fl">${tr('f_preds')}</label><div style="display:flex;gap:7px"><select class="fsel" id="a_psel">${pOpts}</select><button class="btn btn-s btn-sm" type="button" onclick="addPred()">${tr('add_')}</button></div><div class="dep-list" id="predTags"></div></div><div class="fg"><label class="fl">${tr('f_outs')}</label><div style="display:flex;gap:7px"><select class="fsel" id="a_osel">${ouOpts}</select><button class="btn btn-s btn-sm" type="button" onclick="addOut()">${tr('add_')}</button></div><div class="dep-list" id="outTags"></div></div>`,
-()=>{const name=document.getElementById('a_name').value.trim();if(!name)return;const obj={id:_eid||uid(),name,duration:parseFloat(document.getElementById('a_dur').value)||30,cycleTime:parseFloat(document.getElementById('a_ctime').value)||0,cycleCount:parseInt(document.getElementById('a_ccount').value)||0,producesQty:parseInt(document.getElementById('a_qty').value)||1,produces:document.getElementById('a_prod').value||null,consumes:document.getElementById('a_cons').value||null,priority:parseInt(document.getElementById('a_prio').value)||5,operatorId:document.getElementById('a_op').value||null,machineId:document.getElementById('a_mach').value||null,triggersMachine:document.getElementById('a_trig').value||null,interruptible:document.getElementById('a_inter').checked,predecessors:[...tP],outputs:[...tO]};if(_eid){const i=s.activities.findIndex(x=>x.id===_eid);s.activities[i]=obj;}else s.activities.push(obj);sv();closeModal();rActs();});
+openModal(tr('f_act_name'),`<div class="fg"><label class="fl">${tr('f_act_name')}</label><input class="fi" id="a_name" value="${esc(a?.name||'')}"></div><div class="fr2"><div class="fg"><label class="fl">${tr('f_dur')}</label><input class="fi" id="a_dur" type="number" min="1" value="${a?.duration||30}"></div><div class="fg"><label class="fl">${tr('f_priority')} (1=${tr('prio_highest')}, 10=${tr('prio_lowest')})</label><select class="fsel" id="a_prio">${prioOpts}</select></div></div><div class="fr2"><div class="fg"><label class="fl">${tr('f_op')}</label><select class="fsel" id="a_op">${oOpts}</select></div><div class="fg"><label class="fl">${tr('f_mach')}</label><select class="fsel" id="a_mach">${mOpts}</select></div></div><div class="fr2"><div class="fg"><label class="fl">${tr('f_triggers')}</label><select class="fsel" id="a_trig">${tOpts}</select></div><div class="fg" style="display:flex;align-items:center;gap:8px;margin-top:22px"><input type="checkbox" id="a_inter" ${a?.interruptible?'checked':''}> <label for="a_inter" class="fl" style="margin:0">${tr('f_inter')}</label></div>
+<div class="fg" style="margin-top:10px">
+  <label class="fl">${tr('f_act_color')} <span class="xs muted">${tr('f_act_color_hint')}</span></label>
+  <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:4px">
+    <div class="act-color-swatch ${!a?.color?'act-color-selected':''}" data-color="" onclick="pickActColor(this)" style="background:transparent;border:2px dashed var(--text3)" title="${tr('f_act_color_none')}">✕</div>
+    ${'#f0a500,#58a6ff,#3fb950,#bc8cff,#ffa657,#f85149,#79c0ff,#56d364,#e3b341,#d2a8ff,#ff7b72,#39d353,#ffa198,#d4c5f9'.split(',').map(col=>'<div class="act-color-swatch '+(a?.color===col?'act-color-selected':'')+'" data-color="'+col+'" onclick="pickActColor(this)" style="background:'+col+'" title="'+col+'"></div>').join('')}
+    <input type="color" id="a_color_custom" value="${a?.color&&a.color.startsWith('#')?a.color:'#58a6ff'}" onchange="pickActColorCustom(this)" style="width:28px;height:28px;border:none;border-radius:4px;cursor:pointer;background:none" title="Vlastná farba">
+    <input type="hidden" id="a_color" value="${a?.color||''}">
+  </div>
+</div></div><hr style="border-color:var(--border);margin:10px 0"><div class="fg"><label class="fl" style="color:var(--acc)">⚙️ ${tr('f_cycle_time')}</label><input class="fi" id="a_ctime" type="number" min="0" value="${a?.cycleTime||0}"></div><div class="fr2"><div class="fg"><label class="fl">${tr('f_cycle_count')} <span class="xs muted">${tr('cycle_hint')}</span></label><input class="fi" id="a_ccount" type="number" min="0" value="${a?.cycleCount||0}"></div><div class="fg"><label class="fl">${tr('f_produces_qty')}</label><input class="fi" id="a_qty" type="number" min="1" value="${a?.producesQty||1}"></div></div>
+<div class="fr2">
+  <div class="fg">
+    <label class="fl">🔧 ${tr('f_change_every')}</label>
+    <input class="fi" id="a_change_every" type="number" min="0" value="${a?.changeEvery||0}">
+    <span class="xs muted" style="margin-top:3px">${tr('tool_change_hint')}</span>
+  </div>
+  <div class="fg"></div>
+</div><div class="fr2"><div class="fg"><label class="fl">📦 ${tr('f_consumes')}</label><select class="fsel" id="a_cons">${consOpts}</select></div><div class="fg"><label class="fl">✅ ${tr('f_produces')}</label><select class="fsel" id="a_prod">${prodOpts}</select></div></div><hr style="border-color:var(--border);margin:10px 0"><div class="al al-i" style="margin-bottom:10px;font-size:11px">${tr('prio_hint')}</div><div class="fg"><label class="fl">${tr('f_preds')}</label><div style="display:flex;gap:7px"><select class="fsel" id="a_psel">${pOpts}</select><button class="btn btn-s btn-sm" type="button" onclick="addPred()">${tr('add_')}</button></div><div class="dep-list" id="predTags"></div></div><div class="fg"><label class="fl">${tr('f_outs')}</label><div style="display:flex;gap:7px"><select class="fsel" id="a_osel">${ouOpts}</select><button class="btn btn-s btn-sm" type="button" onclick="addOut()">${tr('add_')}</button></div><div class="dep-list" id="outTags"></div></div>`,
+()=>{const name=document.getElementById('a_name').value.trim();if(!name)return;const obj={id:_eid||uid(),name,duration:parseFloat(document.getElementById('a_dur').value)||30,cycleTime:parseFloat(document.getElementById('a_ctime').value)||0,cycleCount:parseInt(document.getElementById('a_ccount').value)||0,producesQty:parseInt(document.getElementById('a_qty').value)||1,produces:document.getElementById('a_prod').value||null,consumes:document.getElementById('a_cons').value||null,priority:parseInt(document.getElementById('a_prio').value)||5,operatorId:document.getElementById('a_op').value||null,machineId:document.getElementById('a_mach').value||null,triggersMachine:document.getElementById('a_trig').value||null,interruptible:document.getElementById('a_inter').checked,color:document.getElementById('a_color')?.value||null,changeEvery:parseInt(document.getElementById('a_change_every')?.value)||0,predecessors:[...tP],outputs:[...tO]};if(_eid){const i=s.activities.findIndex(x=>x.id===_eid);s.activities[i]=obj;}else s.activities.push(obj);sv();closeModal();rActs();});
 window.addPred=()=>{const v=document.getElementById('a_psel').value;if(v&&!tP.includes(v)){tP.push(v);rT(tP,'predTags','rmPred');}};
 window.rmPred=p=>{tP=tP.filter(x=>x!==p);rT(tP,'predTags','rmPred');};
 window.addOut=()=>{const v=document.getElementById('a_osel').value;if(v&&!tO.includes(v)){tO.push(v);rT(tO,'outTags','rmOut');}};
 window.rmOut=o=>{tO=tO.filter(x=>x!==o);rT(tO,'outTags','rmOut');};
 setTimeout(()=>{rT(tP,'predTags','rmPred');rT(tO,'outTags','rmOut');},40);}
 function delAct(id){const s=sim();if(!s)return;openModal('⚠️',`<div class="al al-w">${tr('confirm_del_act')}</div>`,()=>{s.activities=s.activities.filter(a=>a.id!==id);Object.keys(s.sequences).forEach(oid=>{s.sequences[oid]=(s.sequences[oid]||[]).filter(x=>x!==id);});sv();closeModal();rActs();});}
-
+ 
 // ══════════════════════════════════════════════════
 // VISUAL SEQUENCE BUILDER
 // ══════════════════════════════════════════════════
 let _dragAct=null;  // {actId, fromOpId, fromIdx} or {actId} from palette
-
+ 
 function rSeqs(){
   const s=sim();const el=document.getElementById('seqContent');
   if(!s){el.innerHTML=`<div class="al al-w">${tr('no_sims')}</div>`;return;}
   if(!s.operators.length){el.innerHTML=`<div class="empty"><p>${tr('no_ops')}</p></div>`;return;}
-
+ 
   const allActs=s.activities;
-
+  const periodicActs=(s.activities||[]).filter(a=>a.periodic);
+ 
   let html=``;
   s.operators.forEach(op=>{
     const seq=s.sequences[op.id]||[];
@@ -772,7 +984,38 @@ function rSeqs(){
         <span class="sb-rm" onclick="rmSeqItem('${op.id}',${idx})">✕</span>
       </div>`;
     }).join('');
-
+ 
+    // Periodic acts for this operator
+    const opPeriodic=periodicActs.filter(a=>a.operatorId===op.id);
+ 
+    // Periodic acts affecting machines (no operator assigned)
+    // grouped by machine
+    const machPeriodic=periodicActs.filter(a=>!a.operatorId && a.machineId);
+ 
+    // Build periodic blocks for this operator
+    const periodicHtml=opPeriodic.length?`
+      <div style="margin-top:10px;border-top:1px solid var(--border);padding-top:8px">
+        <div style="font-size:11px;color:var(--acc);font-weight:600;margin-bottom:6px">
+          ⏱ ${tr('periodic_act')}
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${opPeriodic.map(a=>{
+            const m=a.machineId?s.machines.find(x=>x.id===a.machineId):null;
+            const trigLabel=a.triggerType==='time'
+              ? `⏱ ${a.triggerN_display||a.triggerN}${a.triggerUnit==='min'?'min':a.triggerUnit==='hour'?'h':'s'}`
+              : `🔩 ${a.triggerN} ks`;
+            return `<div style="background:var(--bg3);border:1px solid var(--acc);border-radius:var(--r);padding:4px 8px;font-size:11px;cursor:pointer"
+              onclick="showPeriodicModal('${a.id}')">
+              ${m?`<span class="mach-dot" style="background:${m.color}"></span>`:''}
+              <strong>${esc(a.name)}</strong>
+              <span style="color:var(--acc);margin-left:4px">${trigLabel}</span>
+              ${a.blocksMachine?'🛑':''}
+              ${a.repeating?'🔄':'1×'}
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`:''
+ 
     html+=`<div class="card" style="margin-bottom:14px">
       <div class="seq-builder">
         <div class="seq-lane">
@@ -786,11 +1029,50 @@ function rSeqs(){
           <div style="margin-top:8px;font-size:11px;color:var(--text3)">
             ${seq.length} ${seq.length===1?'aktivita':'aktivít'} · ${seq.reduce((s2,aid)=>{const a=allActs.find(x=>x.id===aid);return s2+(a?a.duration+(a.cycleTime||0):0);},0)}s celkom
           </div>
+          ${periodicHtml}
         </div>
       </div>
     </div>`;
   });
-
+ 
+  // Periodic acts with no operator — grouped by machine
+  const unassignedPeriodic=periodicActs.filter(a=>!a.operatorId);
+  if(unassignedPeriodic.length){
+    // Group by machine
+    const byMach={};
+    unassignedPeriodic.forEach(a=>{
+      const key=a.machineId||'__none__';
+      if(!byMach[key])byMach[key]=[];
+      byMach[key].push(a);
+    });
+    let machHtml='';
+    Object.entries(byMach).forEach(([mid,acts])=>{
+      const m=s.machines.find(x=>x.id===mid);
+      machHtml+=`<div style="margin-bottom:8px">
+        <div style="font-size:11px;font-weight:600;margin-bottom:4px">
+          ${m?`<span class="mach-dot" style="background:${m.color}"></span> ${esc(m.name)}`:'Bez stroja'}
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          ${acts.map(a=>{
+            const trigLabel=a.triggerType==='time'
+              ? `⏱ ${a.triggerN_display||a.triggerN}${a.triggerUnit==='min'?'min':a.triggerUnit==='hour'?'h':'s'}`
+              : `🔩 ${a.triggerN} ks`;
+            return `<div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--r);padding:4px 8px;font-size:11px;cursor:pointer"
+              onclick="showPeriodicModal('${a.id}')">
+              <strong>${esc(a.name)}</strong>
+              <span style="color:var(--acc);margin-left:4px">${trigLabel}</span>
+              ${a.blocksMachine?'🛑':''}${a.repeating?'🔄':'1×'}
+            </div>`;
+          }).join('')}
+        </div>
+      </div>`;
+    });
+    html+=`<div class="card" style="margin-bottom:14px;border-color:var(--border)">
+      <div class="card-hdr"><div class="card-title">⏱ ${tr('periodic_act')} — ${tr('no_op_')}</div></div>
+      ${machHtml}
+    </div>`;
+  }
+ 
   // Palette
   const palItems=allActs.map(a=>{
     const m=a.machineId?s.machines.find(x=>x.id===a.machineId):null;
@@ -805,15 +1087,15 @@ function rSeqs(){
       <span class="mono xs" style="color:var(--text3)">${a.duration}s</span>
     </div>`;
   }).join('');
-
+ 
   const sidebar=`<div style="width:220px;min-width:220px">
     <div class="seq-palette-title">📦 ${tr('palette_lbl')}</div>
     ${palItems||`<div class="xs muted">${tr('no_acts')}</div>`}
   </div>`;
-
+ 
   el.innerHTML=`<div style="display:flex;gap:16px;align-items:flex-start"><div style="flex:1">${html}</div>${sidebar}</div>`;
 }
-
+ 
 function palDragStart(e,actId){_dragAct={actId,fromOpId:null,fromIdx:-1};e.dataTransfer.effectAllowed='copy';}
 function sbDragStart(e,opId,idx,actId){_dragAct={actId,fromOpId:opId,fromIdx:idx};e.dataTransfer.effectAllowed='move';}
 function sbDragEnd(e){document.querySelectorAll('.seq-track').forEach(t=>t.classList.remove('dragover'));}
@@ -861,12 +1143,13 @@ function sbDropOn(e,opId,idx){
   _dragAct=null;sv();rSeqs();
 }
 function rmSeqItem(opId,idx){const s=sim();if(!s)return;s.sequences[opId]=(s.sequences[opId]||[]).filter((_,i)=>i!==idx);sv();rSeqs();}
-
+ 
 // ══════════════════════════════════════════════════
 // DRAG-SORT for machines and operators
 // ══════════════════════════════════════════════════
 let _dragRowType=null, _dragRowId=null;
-
+let _modelDirty=false;
+ 
 function rowDragStart(e, type, id){
   _dragRowType=type; _dragRowId=id;
   e.currentTarget.classList.add('dragging');
@@ -899,10 +1182,10 @@ function rowDrop(e, type, targetId){
     // ganttOrder is independent, don't auto-sync
   }
 }
-
+ 
 // ── GANTT ROW ORDER ──────────────────────────────────────────────────
 // ganttOrder = [{id, type:'mach'|'op'}] — if empty, use default order
-
+ 
 function getGanttOrder(s){
   if(!s.ganttOrder||!s.ganttOrder.length){
     // Build default: machines first, then operators
@@ -919,7 +1202,7 @@ function getGanttOrder(s){
   ];
   return [...s.ganttOrder, ...extra];
 }
-
+ 
 function renderGanttOrderEditor(){
   const s=sim(); if(!s) return;
   const order=getGanttOrder(s);
@@ -946,7 +1229,7 @@ function renderGanttOrderEditor(){
     </div>`;
   }).join('');
 }
-
+ 
 function moveGanttRow(id, dir){
   const s=sim(); if(!s) return;
   const order=getGanttOrder(s);
@@ -958,14 +1241,14 @@ function moveGanttRow(id, dir){
   sv();
   renderGanttOrderEditor();
 }
-
+ 
 function resetGanttOrder(){
   const s=sim(); if(!s) return;
   s.ganttOrder=[];
   sv();
   renderGanttOrderEditor();
 }
-
+ 
 function toggleGanttOrder(){
   const panel=document.getElementById('ganttOrderPanel');
   const btn=document.getElementById('ganttOrderToggleBtn');
@@ -978,13 +1261,13 @@ function toggleGanttOrder(){
     if(btn) btn.innerHTML=btn.innerHTML.replace('▴','▾');
   }
 }
-
-
+ 
+ 
 // ══════════════════════════════════════════════════
 // PRODUCTS
 // ══════════════════════════════════════════════════
 const PROD_COLORS=['#f0a500','#58a6ff','#3fb950','#bc8cff','#ffa657','#f85149','#e3b341','#79c0ff'];
-
+ 
 function rProds(){
   const s=sim();const el=document.getElementById('prodList');
   if(!s){el.innerHTML=`<div class="al al-w">${tr('no_sims')}</div>`;return;}
@@ -1000,7 +1283,7 @@ function rProds(){
     </div></td></tr>`).join('')}
   </tbody></table></div>`;
 }
-
+ 
 function showProdModal(id){
   const s=sim();if(!s)return;_eid=id||null;
   const p=id?(s.products||[]).find(x=>x.id===id):null;
@@ -1018,7 +1301,7 @@ function showProdModal(id){
     sv();closeModal();rProds();
   });
 }
-
+ 
 function delProd(id){
   const s=sim();if(!s)return;
   openModal('⚠️',`<div class="al al-w">${tr('confirm_del')}</div>`,()=>{
@@ -1027,7 +1310,7 @@ function delProd(id){
     sv();closeModal();rProds();
   });
 }
-
+ 
 // ══════════════════════════════════════════════════
 // WIP SIMULATION
 // ══════════════════════════════════════════════════
@@ -1037,15 +1320,15 @@ function runWip(){
   // Run base simulation first if not done
   if(!simRes){runSim();}
   if(!simRes)return;
-
+ 
   const prods=s.products||[];
-
+ 
   // Use engine's tracked WIP events directly — most accurate source
   // wipProduced[productId] = total produced during simulation
   // wipConsumed[productId] = total consumed during simulation
   const wipP = simRes.wipProduced||{};
   const wipC = simRes.wipConsumed||{};
-
+ 
   // Build per-product summary
   const byProd={};
   prods.forEach(p=>{
@@ -1056,7 +1339,7 @@ function runWip(){
       takt:0, taktCount:0
     };
   });
-
+ 
   // Get takt from activities (for display)
   s.activities.filter(a=>a.produces&&(a.cycleTime||0)>0).forEach(a=>{
     if(byProd[a.produces]){
@@ -1064,11 +1347,11 @@ function runWip(){
       byProd[a.produces].taktCount++;
     }
   });
-
+ 
   // Machine cycles per machine (for detail table)
   const machCycles={};
   simRes.machRes.forEach(m=>{machCycles[m.id]=m.cycles;});
-
+ 
   // Build activity detail stages
   const stages=s.activities.filter(a=>a.produces||a.consumes).map(a=>{
     const prod=a.produces?(prods.find(p=>p.id===a.produces)||null):null;
@@ -1078,10 +1361,10 @@ function runWip(){
     const takt=a.cycleTime||0;
     return{act:a,prod,cons,m,cycles,producedQty:0,consumedQty:0,takt};
   });
-
+ 
   const el=document.getElementById('wipContent');
   if(!prods.length){el.innerHTML=`<div class="empty"><p>${tr('no_product')}</p></div>`;return;}
-
+ 
   // Flow diagram table
   const flowRows=prods.map(p=>{
     const d=byProd[p.id];
@@ -1096,7 +1379,7 @@ function runWip(){
       <td class="mono">${avgTakt}s</td>
     </tr>`;
   }).join('');
-
+ 
   // Activity detail table
   const actRows=stages.map(st=>{
     const m=st.m;
@@ -1110,7 +1393,7 @@ function runWip(){
       <td>${st.cons?`<span class="fc" style="gap:5px"><span class="mach-dot" style="background:${st.cons.color}"></span>${esc(st.cons.name)}</span>`:'-'}</td>
     </tr>`;
   }).join('');
-
+ 
   el.innerHTML=`
   <div class="card">
     <div class="card-hdr"><div class="card-title">📦 ${tr('wip_title')}</div></div>
@@ -1127,20 +1410,62 @@ function runWip(){
     </table></div>
   </div>`;
 }
-
-
+ 
+ 
 // ══════════════════════════════════════════════════
 // SIMULATION ENGINE
 // ══════════════════════════════════════════════════
 let simRes=null,simTL=null;
-
+ 
 function runSim(){
   const s=sim();if(!s)return null;
   const shiftSec=(parseFloat(document.getElementById('shiftH')?.value)||8)*3600;
   const quality=(parseFloat(document.getElementById('qualityPct')?.value)||100)/100;
-
+ 
   const ms={};
-  s.machines.forEach(m=>{ms[m.id]={busyUntil:0,cycles:0,runTime:0,waitTime:0,idleTime:0,waitForOp:0};});
+  s.machines.forEach(m=>{ms[m.id]={busyUntil:0,cycles:0,runTime:0,waitTime:0,idleTime:0,waitForOp:0,cyclesSinceChange:{}};});
+ 
+  // ── Periodic activity tracking ─────────────────────────────────────
+  // periodicState[actId] = {lastCycles: {machId: N}, nextTimeTrigger: T, done: bool}
+  const periodicActs=(s.activities||[]).filter(a=>a.periodic);
+  const periodicState={};
+  periodicActs.forEach(a=>{
+    periodicState[a.id]={
+      cyclesSinceLastFire:0,  // for parts-based
+      lastFireTime:a.triggerOffset||0,      // for time-based
+      pendingFires:0,         // queued fires
+    };
+  });
+ 
+  // Check and queue periodic fires — called after each machine cycle update
+  function checkPeriodic(t){
+    periodicActs.forEach(a=>{
+      const st=periodicState[a.id]; if(!st) return;
+      if(a.triggerType==='time'){
+        // Time-based: fire every triggerN seconds
+        while(t >= st.lastFireTime + a.triggerN){
+          st.lastFireTime += a.triggerN;
+          if(st.lastFireTime > (a.triggerOffset||0)) st.pendingFires++;
+        }
+      } else {
+        // Parts-based: fire every triggerN cycles of the watched machine
+        if(a.machineId && ms[a.machineId]){
+          const mCycles=ms[a.machineId].cycles;
+          const threshold=a.triggerN||50;
+          const offset=a.triggerOffset||0;
+          const cyclesAboveOffset=Math.max(0,mCycles-offset);
+          const fires=Math.floor(cyclesAboveOffset/threshold);
+          const prevFires=Math.floor(Math.max(0,st.cyclesSinceLastFire-offset)/threshold);
+          const newFires=fires-prevFires;
+          if(newFires>0){
+            st.pendingFires+=newFires;
+            if(!a.repeating) st.pendingFires=Math.min(st.pendingFires,1);
+          }
+          st.cyclesSinceLastFire=mCycles;
+        }
+      }
+    });
+  }
   const os={};
   s.operators.forEach(o=>{os[o.id]={activeTime:0,waitTime:0};});
   const tl={};
@@ -1148,7 +1473,7 @@ function runSim(){
   s.operators.forEach(o=>tl[o.id]=[]);
   const actWait={};
   s.activities.forEach(a=>{actWait[a.id]={totalWait:0,count:0};});
-
+ 
   // ── WIP inventory: tracks real-time part counts per product ──────────
   // wip[productId] = current stock count
   // Starts at 0 — operator must wait if consumes product not yet produced.
@@ -1164,7 +1489,7 @@ function runSim(){
     wipConsumed[p.id]=0;
     wipProduced[p.id]=0;
   });
-
+ 
   // Helper: get cumulative stock at time T (sum of all events with time <= T)
   function wipStockAt(prodId, T){
     const evs=wipEvents[prodId]||[];
@@ -1172,7 +1497,7 @@ function runSim(){
     for(const ev of evs) if(ev.time<=T) stock+=ev.qty; else break;
     return stock - (wipConsumed[prodId]||0);
   }
-
+ 
   // Helper: find earliest time when stock >= needed (starting from minTime)
   // Returns the time when the Nth part becomes available, counting from minTime.
   function wipAvailableAt(prodId, neededQty, minTime){
@@ -1194,7 +1519,7 @@ function runSim(){
     }
     return Infinity; // never produced enough in this shift
   }
-
+ 
   // Helper: add production event (called when machine cycle completes)
   function wipProduce(prodId, qty, time){
     if(!prodId||!wipEvents[prodId])return;
@@ -1202,13 +1527,13 @@ function runSim(){
     wipEvents[prodId].sort((a,b)=>a.time-b.time);
     wipProduced[prodId]=(wipProduced[prodId]||0)+qty;
   }
-
+ 
   // Helper: consume parts (called when load activity starts)
   function wipConsume(prodId, qty){
     if(!prodId||!wipEvents[prodId])return;
     wipConsumed[prodId]=(wipConsumed[prodId]||0)+qty;
   }
-
+ 
   // ── Per-operator simulation ──────────────────────────────────────────
   // SEQUENCE RULES:
   //  - Sequence is walked STRICTLY in order (no wrap-around skipping).
@@ -1219,7 +1544,7 @@ function runSim(){
   //  - urgentAct: only activities NOT in sequence (operatorId match but
   //    not in seqIds), with priority < 5. These can interrupt.
   //  - Welder (or any out-of-sequence act) fires when machine is ready.
-
+ 
   // ── TRUE PARALLEL PRIORITY-BASED simulation ─────────────────────────
   //
   // Each operator has a PRIORITY LIST of all their activities.
@@ -1243,26 +1568,48 @@ function runSim(){
     const seqIds=s.sequences[op.id]||[];
     const seqActs=seqIds.map(id=>s.activities.find(a=>a.id===id)).filter(Boolean);
     const seqIdSet=new Set(seqIds);
-    const extraActs=s.activities.filter(a=>a.operatorId===op.id&&!seqIdSet.has(a.id)&&a.machineId);
+    // Unique acts (for lookup) — preserving sequence order
     const seen=new Set();
-    const allActs=[...seqActs,...extraActs].filter(a=>{if(seen.has(a.id))return false;seen.add(a.id);return true;});
-    return{op,allActs,t:0,interrupted:null};
+    const allActs=seqActs.filter(a=>{if(seen.has(a.id))return false;seen.add(a.id);return true;});
+    return{op,seqActs,allActs,t:0,seqIdx:0,interrupted:null};
   }).filter(ag=>ag.allActs.length>0);
-
+ 
   function bestAct(ag,T){
-    let best=null,bestP=999,bestW=-1;
-    for(const a of ag.allActs){
-      const p=a.priority||5; if(p>bestP)continue;
-      if(a.machineId&&ms[a.machineId]&&ms[a.machineId].busyUntil>T)continue;
-      if(a.consumes&&wipAvailableAt(a.consumes,1,T)>T)continue;
-      const w=a.machineId&&ms[a.machineId]?T-ms[a.machineId].busyUntil:0;
-      if(p<bestP||(p===bestP&&w>bestW)){best=a;bestP=p;bestW=w;}
+    // Follow sequence strictly.
+    // When current step's machine is busy, look ahead for a machine that has
+    // FINISHED its cycle and needs servicing — execute it as a "fill" step
+    // but do NOT advance seqIdx (so we retry the blocked step next iteration).
+    // seqIdx only advances when we execute the ACTUAL current step.
+    const seq=ag.seqActs;
+    if(!seq||!seq.length) return null;
+    const start=ag.seqIdx%seq.length;
+    const cur=seq[start];
+    const curMachBusy=cur.machineId&&ms[cur.machineId]&&ms[cur.machineId].busyUntil>T;
+    const curWipMiss=cur.consumes&&wipAvailableAt(cur.consumes,1,T)>T;
+ 
+    // Current step available — execute it and advance index
+    if(!curMachBusy&&!curWipMiss)
+      return{act:cur, newIdx:(start+1)%seq.length, isSkip:false};
+ 
+    // WIP missing — must wait
+    if(curWipMiss) return null;
+ 
+    // Current machine busy — look for a finished machine to service
+    // IMPORTANT: isSkip=true means seqIdx does NOT advance after this
+    for(let look=1;look<seq.length;look++){
+      const idx2=(start+look)%seq.length;
+      const alt=seq[idx2];
+      if(!alt.machineId||alt.machineId===cur.machineId) continue;
+      if(ms[alt.machineId]&&ms[alt.machineId].busyUntil>T) continue;
+      if(alt.consumes&&wipAvailableAt(alt.consumes,1,T)>T) continue;
+      if(ms[alt.machineId]&&ms[alt.machineId].cycles===0) continue;
+      return{act:alt, newIdx:start, isSkip:true}; // keep seqIdx at start
     }
-    return best;
+    return null;
   }
   function nextDoableTime(ag,T){
     let ne=shiftSec;
-    for(const a of ag.allActs){
+    for(const a of ag.seqActs){
       if(a.machineId&&ms[a.machineId]&&ms[a.machineId].busyUntil>T)ne=Math.min(ne,ms[a.machineId].busyUntil);
       if(a.consumes){const av=wipAvailableAt(a.consumes,1,T);if(av<Infinity&&av>T)ne=Math.min(ne,av);}
     }
@@ -1272,7 +1619,7 @@ function runSim(){
     if(ne>=shiftSec) return Math.min(T+60, shiftSec);
     return ne;
   }
-
+ 
   let globalItr=0; const MAX_ITR=2000000;
   while(globalItr<MAX_ITR){
     globalItr++;
@@ -1280,7 +1627,7 @@ function runSim(){
     for(const a of opAgents){if(a.t<minT){minT=a.t;ag=a;}}
     if(!ag||ag.t>=shiftSec)break;
     const{op}=ag; let t=ag.t;
-
+ 
     // Resume interrupted activity
     if(ag.interrupted){
       const{act:iA,remaining:rem}=ag.interrupted;
@@ -1294,15 +1641,73 @@ function runSim(){
       }
       continue;
     }
-
-    const act=bestAct(ag,t);
-    if(!act){
+ 
+    const _br=bestAct(ag,t);
+    if(!_br){
+      // Nothing to do in sequence — try periodic activities first
+      // Only fire periodic if the NEXT blocked sequence step's machine
+      // won't be free before the periodic activity finishes.
+      // This means: periodic only fires when the operator has a genuine idle window.
+      const nextSeqAct=ag.seqActs[ag.seqIdx%ag.seqActs.length];
+      const nextMachFreeAt=nextSeqAct?.machineId&&ms[nextSeqAct.machineId]
+        ?ms[nextSeqAct.machineId].busyUntil:Infinity;
+      const minPeriodicDur=periodicActs
+        .filter(a=>a.operatorId===op.id&&(periodicState[a.id]?.pendingFires||0)>0)
+        .reduce((min,a)=>Math.min(min,a.duration||20),Infinity);
+      // If next machine is free before periodic finishes → wait for it instead
+      if(nextMachFreeAt<=t+minPeriodicDur){
+        const ie=Math.min(nextMachFreeAt,shiftSec);
+        if(ie>t) tl[op.id].push({start:t,end:ie,type:'idle',label:'—',actId:null});
+        ag.t=ie>t?ie:shiftSec; continue;
+      }
+      let firedPeriodic=false;
+      for(const pa of periodicActs){
+        if(!pa.operatorId||pa.operatorId!==op.id) continue;
+        const pst=periodicState[pa.id]; if(!pst) continue;
+        // Check time-based trigger
+        if(pa.triggerType==='time'){
+          while(t>=pst.lastFireTime+pa.triggerN && pst.lastFireTime+pa.triggerN<=shiftSec){
+            pst.lastFireTime+=pa.triggerN;
+            if(t>=(pa.triggerOffset||0)) pst.pendingFires++;
+          }
+        }
+        if(pst.pendingFires<=0) continue;
+        pst.pendingFires--;
+        const pDur=pa.duration||20;
+        // Both operator and machine start at same time:
+        // wait for machine to finish current cycle
+        let changeStart=t;
+        if(pa.blocksMachine&&pa.machineId&&ms[pa.machineId]){
+          changeStart=Math.max(t,ms[pa.machineId].busyUntil);
+        }
+        const pEnd=Math.min(changeStart+pDur,shiftSec);
+        if(pEnd>changeStart){
+          if(changeStart>t){
+            tl[op.id].push({start:t,end:changeStart,type:'idle',label:'—',actId:null});
+          }
+          tl[op.id].push({start:changeStart,end:pEnd,type:'op',label:'⏱ '+pa.name,actId:pa.id});
+          os[op.id].activeTime+=(pEnd-changeStart);
+          if(pa.blocksMachine&&pa.machineId&&ms[pa.machineId]){
+            const mst3=ms[pa.machineId];
+            tl[pa.machineId].push({start:changeStart,end:pEnd,type:'wait',label:'🔧',actId:pa.id});
+            mst3.waitTime+=(pEnd-changeStart);
+            mst3.busyUntil=pEnd;
+          }
+          t=pEnd; ag.t=t;
+          firedPeriodic=true;
+        }
+        if(t>=shiftSec) break;
+      }
+      if(firedPeriodic) continue;
+      // Truly idle — wait for next event
       const ne=nextDoableTime(ag,t);const ie=Math.min(ne,shiftSec);
       if(ie>t)tl[op.id].push({start:t,end:ie,type:'idle',label:'—',actId:null});
       ag.t=ie>t?ie:shiftSec;continue;
     }
+    const act=_br.act;
+    if(!_br.isSkip) ag.seqIdx=_br.newIdx; // only advance if not a fill-skip
     const machTakt=act.cycleTime||0;
-
+ 
     if(act.consumes){
       const avT=wipAvailableAt(act.consumes,1,t);
       if(avT===Infinity){const ne=nextDoableTime(ag,t);const ie=Math.min(ne,shiftSec);tl[op.id].push({start:t,end:ie,type:'idle',label:'—',actId:null});ag.t=ie;continue;}
@@ -1310,25 +1715,56 @@ function runSim(){
       wipConsume(act.consumes,1);
     }
     if(act.machineId){const mst=ms[act.machineId];if(mst&&mst.busyUntil>t){const wEnd=Math.min(mst.busyUntil,shiftSec);tl[op.id].push({start:t,end:wEnd,type:'opwait',label:'⏳ '+act.name,actId:act.id});os[op.id].waitTime+=(wEnd-t);actWait[act.id].totalWait+=(wEnd-t);actWait[act.id].count++;t=wEnd;ag.t=t;if(t>=shiftSec)continue;}}
-
+ 
     let preemptAt=t+act.duration,preemptBy=null;
     if(act.interruptible){for(const ea of ag.allActs){if(!ea.machineId||ea.id===act.id)continue;const m2=ms[ea.machineId];if(!m2)continue;const p2=ea.priority||5,cp=act.priority||5;if(p2<cp&&m2.busyUntil>t&&m2.busyUntil<preemptAt){preemptAt=m2.busyUntil;preemptBy=ea;}}}
     const wkEnd=Math.min(preemptAt,shiftSec);const wkd=wkEnd-t;
     if(wkd>0.001){tl[op.id].push({start:t,end:wkEnd,type:'op',label:act.name,actId:act.id});os[op.id].activeTime+=wkd;}
     t=wkEnd;ag.t=t;if(t>=shiftSec)continue;
-
+ 
     if(preemptBy){const rem=act.duration-wkd;if(act.interruptible&&rem>0.5)ag.interrupted={act,remaining:rem};continue;}
-
+ 
     const trigId=act.triggersMachine||act.machineId;
     if(trigId&&machTakt>0&&t<=shiftSec){const mst=ms[trigId];if(mst){const cyc=Math.max(act.cycleCount||1,1);let cS=Math.max(t,mst.busyUntil);for(let ci=0;ci<cyc;ci++){const cE=Math.min(cS+machTakt,shiftSec);if(cE<=cS)break;tl[trigId].push({start:cS,end:cE,type:'run',label:'▶'+(cyc>1?` ${ci+1}/${cyc}`:''),actId:act.id});mst.runTime+=(cE-cS);mst.cycles++;if(act.produces)wipProduce(act.produces,act.producesQty||1,cE);cS=cE;}mst.busyUntil=cS;}}
     if(act.produces&&(!trigId||machTakt===0))wipProduce(act.produces,act.producesQty||1,t);
-
+    checkPeriodic(t); // check after every activity
+ 
+    // ── Tool change check ─────────────────────────────────────────
+    if((act.changeEvery||0)>0&&trigId&&ms[trigId]){
+      const mst2=ms[trigId];
+      if(!mst2.cyclesSinceChange)mst2.cyclesSinceChange={};
+      const prevCyc=mst2.cyclesSinceChange[act.id]||0;
+      const addCyc=Math.max(act.cycleCount||1,1);
+      const newCyc=prevCyc+addCyc;
+      const changes=Math.floor(newCyc/act.changeEvery)-Math.floor(prevCyc/act.changeEvery);
+      mst2.cyclesSinceChange[act.id]=newCyc%act.changeEvery;
+      if(changes>0&&t<shiftSec){
+        // Tool change: operator stops to change tool, machine also stopped
+        const changeDur=act.duration||20;
+        for(let ch=0;ch<changes;ch++){
+          const chS=Math.max(t,mst2.busyUntil);
+          const chE=Math.min(chS+changeDur,shiftSec);
+          if(chE<=chS)break;
+          // Machine waits during change
+          tl[trigId].push({start:chS,end:chE,type:'wait',label:'🔧',actId:act.id});
+          mst2.waitTime+=(chE-chS);
+          mst2.busyUntil=chE;
+          // Operator works tool change
+          tl[op.id].push({start:t,end:Math.min(t+changeDur,shiftSec),type:'op',label:'🔧 '+act.name,actId:act.id});
+          os[op.id].activeTime+=Math.min(changeDur,shiftSec-t);
+          t=Math.min(t+changeDur,shiftSec);
+          ag.t=t;
+          if(t>=shiftSec)break;
+        }
+      }
+    }
+ 
   }// while globalItr
-
-
-
-
-
+ 
+ 
+ 
+ 
+ 
   // ── Machine wait/idle fill ────────────────────────────────────────────
   s.machines.forEach(m=>{
     const mst=ms[m.id];
@@ -1342,7 +1778,7 @@ function runSim(){
     mst.waitForOp=mst.waitTime;
     mst.idleTime=Math.max(0,shiftSec-mst.runTime-mst.waitTime);
   });
-
+ 
   // ── Operator idle fill ────────────────────────────────────────────────
   s.operators.forEach(op=>{
     const ost=os[op.id];
@@ -1351,7 +1787,7 @@ function runSim(){
     evs.forEach(ev=>{if(ev.start>prev){tl[op.id].push({start:prev,end:ev.start,type:'idle',label:'—',actId:null});}prev=Math.max(prev,ev.end);});
     if(prev<shiftSec)tl[op.id].push({start:prev,end:shiftSec,type:'idle',label:'—',actId:null});
   });
-
+ 
   // ── Results ───────────────────────────────────────────────────────────
   const machRes=s.machines.map(m=>{
     const mst=ms[m.id];
@@ -1385,14 +1821,32 @@ function runSim(){
   simTL=tl;
   return simRes;
 }
-
-
+ 
+ 
 // ── GANTT ──────────────────────────────────────────────────────────
 const GANTT_W=1600;
+let ganttOffset=0; // start of visible window in seconds
 let ganttPlayTimer=null,ganttPlaying=false,ganttCurSec=0,ganttDispSec=0,ganttSpeed=1;
-
+ 
 function fmt(s){if(!s||s<0)return'0:00';const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=Math.floor(s%60);return h?`${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`:`${m}:${String(sec).padStart(2,'0')}`;}
-
+ 
+ 
+function ganttPan(dir){
+  if(!simRes) return;
+  const shiftSec=simRes.shiftSec;
+  const step=ganttDispSec*0.5; // pan by half the window
+  ganttOffset=Math.max(0,Math.min(ganttOffset+dir*step, shiftSec-ganttDispSec));
+  renderGantt();
+}
+ 
+function ganttPanTo(pct){
+  if(!simRes) return;
+  const shiftSec=simRes.shiftSec;
+  const maxOffset=Math.max(0,shiftSec-ganttDispSec);
+  ganttOffset=Math.round(pct/100*maxOffset);
+  renderGantt();
+}
+ 
 function renderGantt(){
   if(!simTL||!simRes)return;
   const s=sim();if(!s)return;
@@ -1406,69 +1860,102 @@ function renderGantt(){
   else if(zoomVal==='2h') dispSec=7200;
   else dispSec=shiftSec; // 'full'
   ganttDispSec=dispSec;
-
+  // Clamp offset to valid range
+  const maxOffset=Math.max(0,shiftSec-dispSec);
+  ganttOffset=Math.max(0,Math.min(ganttOffset,maxOffset));
+  const winStart=ganttOffset;
+  const winEnd=ganttOffset+dispSec;
+ 
+  // Update pan slider and offset label
+  const ps=document.getElementById('ganttPanSlider');
+  if(ps){ps.max=100;ps.value=maxOffset>0?Math.round(ganttOffset/maxOffset*100):0;
+    ps.style.display=maxOffset>0?'':'none';}
+  const ol=document.getElementById('ganttOffsetLabel');
+  if(ol) ol.textContent=ganttOffset>0?fmt(ganttOffset):'';
+  const pb=document.querySelectorAll('.gantt-pan-btn');
+  pb.forEach(b=>b.style.display=maxOffset>0?'':'none');
+ 
   const sc=GANTT_W/dispSec;
   const rows=[];
   const ganttOrder=getGanttOrder(s);
   ganttOrder.forEach(item=>{
     if(item.type==='mach'){
       const m=s.machines.find(x=>x.id===item.id);if(!m)return;
-      const evs=(simTL[m.id]||[]).filter(e=>e.start<dispSec).sort((a,b)=>a.start-b.start);
-      const blks=evs.map(e=>{const x=e.start*sc;const w=Math.max(2,(Math.min(e.end,dispSec)-e.start)*sc);const act=e.actId?s.activities.find(a=>a.id===e.actId):null;return`<div class="gblk gb-${e.type}" style="left:${x.toFixed(1)}px;width:${w.toFixed(1)}px" title="${esc(act?act.name:e.label||'')} ${fmt(e.start)}–${fmt(e.end)}">${w>30?(act?esc(act.name.substr(0,10)):(e.label||'')):''}</div>`;}).join('');
+      // Only events visible in [winStart, winEnd]
+      const evs=(simTL[m.id]||[]).filter(e=>e.end>winStart&&e.start<winEnd).sort((a,b)=>a.start-b.start);
+      const blks=evs.map(e=>{
+        const x=Math.max(0,(e.start-winStart)*sc);
+        const x2=Math.min(GANTT_W,(e.end-winStart)*sc);
+        const w=Math.max(2,x2-x);
+        const act=e.actId?s.activities.find(a=>a.id===e.actId):null;
+        const actColor=act?.color||null;
+        const colorStyle=actColor&&e.type==='run'?`background:${actColor};border-color:${actColor}`:'';
+        return`<div class="gblk gb-${e.type}" style="left:${x.toFixed(1)}px;width:${w.toFixed(1)}px;${colorStyle}" title="${esc(act?act.name:e.label||'')} ${fmt(e.start)}–${fmt(e.end)}">${w>30?(act?esc(act.name.substr(0,10)):(e.label||'')):''}</div>`;
+      }).join('');
       rows.push(`<div class="gantt-row"><div class="g-row-lbl"><span class="mach-dot" style="background:${m.color}"></span>${esc(m.name)}</div><div class="g-track" style="width:${GANTT_W}px" id="gt_${m.id}">${blks}</div></div>`);
     } else {
       const op=s.operators.find(x=>x.id===item.id);if(!op)return;
-      const evs=(simTL[op.id]||[]).filter(e=>e.start<dispSec).sort((a,b)=>a.start-b.start);
-      const blks=evs.map(e=>{const x=e.start*sc;const w=Math.max(2,(Math.min(e.end,dispSec)-e.start)*sc);return`<div class="gblk gb-${e.type}" style="left:${x.toFixed(1)}px;width:${w.toFixed(1)}px" title="${esc(e.label||'')} ${fmt(e.start)}–${fmt(e.end)}">${w>45?esc((e.label||'').substr(0,14)):''}</div>`;}).join('');
+      const evs=(simTL[op.id]||[]).filter(e=>e.end>winStart&&e.start<winEnd).sort((a,b)=>a.start-b.start);
+      const blks=evs.map(e=>{
+        const x=Math.max(0,(e.start-winStart)*sc);
+        const x2=Math.min(GANTT_W,(e.end-winStart)*sc);
+        const w=Math.max(2,x2-x);
+        const act=e.actId?s.activities.find(a=>a.id===e.actId):null;
+        const actColor=act?.color||null;
+        const colorStyle=actColor&&e.type==='op'?`background:${actColor};border-color:${actColor}`:'';
+        return`<div class="gblk gb-${e.type}" style="left:${x.toFixed(1)}px;width:${w.toFixed(1)}px;${colorStyle}" title="${esc(e.label||act?.name||'')} ${fmt(e.start)}–${fmt(e.end)}">${w>45?esc((e.label||act?.name||'').substr(0,14)):''}</div>`;
+      }).join('');
       rows.push(`<div class="gantt-row"><div class="g-row-lbl">👤 ${esc(op.name)}</div><div class="g-track" style="width:${GANTT_W}px">${blks}</div></div>`);
     }
   });
-
-  // Time axis
+ 
+  // Time axis — show absolute times
   const tickInterval=dispSec<=900?60:dispSec<=3600?300:dispSec<=7200?600:1800;
   let ticks='';
-  for(let t=0;t<=dispSec;t+=tickInterval){
-    const x=(t/dispSec*GANTT_W).toFixed(1);
+  for(let t=winStart;t<=winEnd;t+=tickInterval){
+    const x=((t-winStart)/dispSec*GANTT_W).toFixed(1);
     ticks+=`<div class="g-tick" style="left:${x}px">${fmt(t)}</div>`;
   }
-
+ 
   const el=document.getElementById('ganttArea');
   el.innerHTML=`
     <div class="gantt-wrap">
       <div class="g-axis" style="width:${GANTT_W}px;margin-left:160px">${ticks}</div>
       <div class="g-rows">${rows.join('')}</div>
     </div>`;
-
+ 
   // Legend
   const legEl=document.getElementById('ganttLegend');
   if(legEl) legEl.style.display='flex';
-
+ 
   seekTo(ganttCurSec);
 }
-
+ 
 function seekTo(sec){
   ganttCurSec=Math.max(0,Math.min(sec,ganttDispSec||simRes?.shiftSec||28800));
   const s=sim();if(!simTL||!s)return;
   const dispSec=ganttDispSec||simRes.shiftSec;
   const sc=GANTT_W/dispSec;
-
+ 
   // Sync slider
   const slider=document.getElementById('pbSlider');
   if(slider){slider.max=Math.round(dispSec);slider.value=Math.round(ganttCurSec);}
   const timeEl=document.getElementById('pbTimeDisplay');
   if(timeEl) timeEl.textContent=fmt(ganttCurSec);
-
+ 
   // Draw cursor line on every track
   document.querySelectorAll('.g-track').forEach(tr=>{
     let cur=tr.querySelector('.g-cursor');
     if(!cur){cur=document.createElement('div');cur.className='g-cursor';tr.appendChild(cur);}
-    cur.style.left=(ganttCurSec*sc).toFixed(1)+'px';
+    const curX=(ganttCurSec-ganttOffset)*sc;
+    cur.style.left=curX.toFixed(1)+'px';
+    cur.style.display=(ganttCurSec>=ganttOffset&&ganttCurSec<=ganttOffset+ganttDispSec)?'block':'none';
   });
-
+ 
   // State table
   updateStateTable(ganttCurSec);
 }
-
+ 
 function updateStateTable(sec){
   const s=sim();if(!simTL||!s||!simRes)return;
   const stateColors={run:'var(--green)',wait:'var(--red)',idle:'var(--text3)',op:'var(--blue)',opwait:'var(--purple)',wipwait:'var(--acc)'};
@@ -1496,7 +1983,7 @@ function updateStateTable(sec){
   const lbl=document.getElementById('ttTimeLabel');
   if(lbl) lbl.textContent=fmt(sec);
 }
-
+ 
 function togglePlay(){
   ganttPlaying=!ganttPlaying;
   const btn=document.getElementById('pbPlayBtn');
@@ -1533,26 +2020,26 @@ function onGanttClick(e){
   const t=Math.max(0,(relX/GANTT_W)*dispSec);
   seekTo(t);
 }
-
+ 
 function runAndShow(){runSim();renderResults();renderGantt();}
 function pct(v){return(v*100).toFixed(1)+'%';}
 function ftm(s){if(!s||s<=0)return'0:00';const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),sec=Math.floor(s%60);return h?`${h}:${String(m).padStart(2,'0')}:${String(sec).padStart(2,'0')}`:`${m}:${String(sec).padStart(2,'0')}`;}
 function oeeC(v){return v>=0.85?'good':v>=0.6?'warn':'bad';}
-
+ 
 function renderResults(){
   if(!simRes)return;
   const{machRes,opRes,lineOEE,bn,parts,theoLineMax,shiftSec,actWait}=simRes;
   const el=document.getElementById('resultsArea');
   const s=sim();
-
+ 
   function oeeBar(val){const cl=oeeC(val);return `<div style="display:flex;align-items:center;gap:8px"><div style="flex:1;background:var(--bg4);border-radius:3px;height:8px;overflow:hidden"><div class="pf ${cl}" style="width:${(val*100).toFixed(1)}%;height:100%"></div></div><span class="mono xs ${cl}" style="width:42px;text-align:right;font-weight:700">${pct(val)}</span></div>`;}
-
+ 
   const lineAvail=machRes.filter(m=>m.cycles>0).length?(machRes.filter(m=>m.cycles>0).reduce((s2,m)=>s2+m.runTime,0)/(shiftSec*machRes.filter(m=>m.cycles>0).length)):0;
   const linePerf=theoLineMax>0?Math.min(parts/theoLineMax,1):0;
   const lineQual=simRes.quality;
   const bnActs=bn?s.activities.filter(a=>(a.triggersMachine===bn.id||a.machineId===bn.id)&&a.cycleTime>0):[];
   const bnTakt=bnActs.length?bnActs.reduce((s2,a)=>s2+a.cycleTime,0)/bnActs.length:0;
-
+ 
   const overall=`<div class="card"><div class="card-hdr"><div class="card-title">📊 ${tr('line')}</div><span class="xs muted">${tr('line_oee_note')}</span></div>
     <div class="mgrid" style="margin-bottom:14px">
       <div class="mc"><div class="ml">OEE — ${tr('line')}</div><div class="mv ${oeeC(lineOEE)}" style="margin-bottom:6px">${pct(lineOEE)}</div>
@@ -1563,7 +2050,7 @@ function renderResults(){
       <div class="mc"><div class="ml">${tr('bottleneck')}</div><div class="mv warn" style="font-size:15px">${bn?`<span class="fc gap-6"><span class="mach-dot" style="background:${bn.color}"></span>${esc(bn.name)}</span>`:'—'}</div>
         <div class="ms">${bnTakt?`Takt: ${bnTakt.toFixed(1)}s`:'—'}</div></div>
     </div><div class="al al-i xs">${tr('line_oee_formula')}</div></div>`;
-
+ 
   const machTable=`<div class="card"><div class="card-hdr"><div class="card-title">⚙️ ${tr('oee_per_machine')}</div></div>
     <div class="tw"><table><thead><tr><th></th><th>${tr('f_mach_name')}</th><th>${tr('oee')}</th><th>${tr('avail')}</th><th>${tr('perf')}</th><th>${tr('qual')}</th><th>${tr('cycles_label')}</th><th>${tr('takt_label')}</th><th>${tr('run_t')}</th><th>${tr('wait_t')}</th><th>${tr('wait_pct')}</th></tr></thead>
     <tbody>${machRes.map(m=>{
@@ -1578,7 +2065,7 @@ function renderResults(){
         <td class="mono">${ftm(m.runTime)}</td><td class="mono ${m.waitTime>shiftSec*0.15?'bad':''}">${ftm(m.waitTime)}</td>
         <td><div style="width:60px">${oeeBar(waitPct)}</div></td></tr>`;}).join('')}
     </tbody></table></div></div>`;
-
+ 
   const opTable=`<div class="card"><div class="card-hdr"><div class="card-title">👤 ${tr('oee_per_op')}</div></div>
     <div class="xs muted" style="margin-bottom:10px">${tr('op_oee_formula')}</div>
     <div class="tw"><table><thead><tr><th>${tr('f_op_name')}</th><th>${tr('op_oee')}</th><th>${tr('util')}</th><th>${tr('active_t')}</th><th>${tr('wait_t')}</th><th>${tr('idle_t')}</th></tr></thead>
@@ -1589,7 +2076,7 @@ function renderResults(){
       <td class="mono">${ftm(o.activeTime)}</td><td class="mono ${o.waitTime>shiftSec*0.1?'bad':''}">${ftm(o.waitTime)}</td>
       <td class="mono">${ftm(o.idleTime)}</td></tr>`;}).join('')}
     </tbody></table></div></div>`;
-
+ 
   const maxW=Math.max(...Object.values(actWait).map(x=>x.totalWait),1);
   const waitRows=Object.entries(actWait).filter(([,v])=>v.count>0).sort((a,b)=>b[1].totalWait-a[1].totalWait)
     .map(([aid,v])=>{const act=s?.activities.find(x=>x.id===aid);return`<div class="wait-row">
@@ -1601,12 +2088,12 @@ function renderResults(){
     </div>`;}).join('');
   const waitCard=`<div class="card"><div class="card-hdr"><div class="card-title">⏱ ${tr('wait_analysis')}</div></div>
     <div class="xs muted" style="margin-bottom:10px">${tr('wait_detail')}</div>${waitRows||`<div class="xs muted">—</div>`}</div>`;
-
+ 
   el.innerHTML=overall+machTable+opTable+waitCard;
 }
-
-
-
+ 
+ 
+ 
 // ── INIT ──────────────────────────────────────────────
 ld();setLang('sk');
 </script>
