@@ -1578,14 +1578,11 @@ function runSim(){
   }).filter(ag=>ag.allActs.length>0);
 
   function bestAct(ag,T){
-    // Strict sequence with smart fill-in skipping.
-    // Rules:
-    // 1. If current step is fully available → execute it, advance seqIdx, reset skipDone
-    // 2. If current step blocked (machine busy OR wip missing):
-    //    → look ahead for steps on OTHER machines that are idle & available
-    //    → execute as fill-in skip (seqIdx stays, skipDone tracks to avoid re-doing)
-    //    → reset skipDone after each wait/idle cycle
-    // 3. If nothing found → wait
+    // Strict sequence with fill-in skipping.
+    // When current step blocked: find available step on ANOTHER machine.
+    // seqIdx keeps pointing to blocked step (isSkip=true, newIdx=start).
+    // Cycle-count balancer: among available fill-in candidates,
+    // prefer the machine with FEWEST cycles (equalizes utilization).
     const seq=ag.seqActs;
     if(!seq||!seq.length) return null;
     const start=ag.seqIdx%seq.length;
@@ -1593,30 +1590,35 @@ function runSim(){
     const curMachBusy=cur.machineId&&ms[cur.machineId]&&ms[cur.machineId].busyUntil>T;
     const curWipMiss=cur.consumes&&wipAvailableAt(cur.consumes,1,T)>T;
 
-    // Current step fully available → execute normally
+    // Current step available → execute and advance
     if(!curMachBusy&&!curWipMiss){
-      if(!ag.skipDone) ag.skipDone=new Set();
-      ag.skipDone.clear();
-      return{act:cur, newIdx:(start+1)%seq.length, isSkip:false};
+      if(ag.skipDone) ag.skipDone.clear();
+      const nextIdx=(start+1)%seq.length;
+      if(nextIdx===0) ag.skipOffset=0;
+      return{act:cur, newIdx:nextIdx, isSkip:false};
     }
 
-    // Current step blocked (either machine busy or WIP missing)
-    // Look for fill-in work on other machines
+    // Current step blocked → look for fill-in on another machine
     if(!ag.skipDone) ag.skipDone=new Set();
+    const candidates=[];
     for(let look=1;look<seq.length;look++){
       const idx2=(start+look)%seq.length;
       const alt=seq[idx2];
-      if(!alt.machineId) continue; // skip no-machine steps
-      if(alt.machineId===cur.machineId) continue; // same machine still busy
-      if(ag.skipDone.has(alt.machineId)) continue; // already filled in this window
-      if(ms[alt.machineId]&&ms[alt.machineId].busyUntil>T) continue; // alt machine busy
-      if(alt.consumes&&wipAvailableAt(alt.consumes,1,T)>T) continue; // alt needs WIP
-      // For fill-in: accept even first-time machines (cycles===0) 
-      // since this might be startup
-      ag.skipDone.add(alt.machineId);
-      return{act:alt, newIdx:start, isSkip:true};
+      if(!alt.machineId) continue;
+      if(alt.machineId===cur.machineId) continue;
+      if(ag.skipDone.has(alt.machineId)) continue;
+      if(ms[alt.machineId]&&ms[alt.machineId].busyUntil>T) continue;
+      if(alt.consumes&&wipAvailableAt(alt.consumes,1,T)>T) continue;
+      candidates.push({alt,idx2});
     }
-    return null; // nothing to do → idle/wait
+    if(candidates.length>0){
+      // Sort by machine cycle count ascending → least-used machine gets priority
+      candidates.sort((a,b)=>(ms[a.alt.machineId]?.cycles||0)-(ms[b.alt.machineId]?.cycles||0));
+      const pick=candidates[0];
+      ag.skipDone.add(pick.alt.machineId);
+      return{act:pick.alt, newIdx:start, isSkip:true};
+    }
+    return null;
   }
   function nextDoableTime(ag,T){
     let ne=shiftSec;
